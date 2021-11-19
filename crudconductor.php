@@ -1,3 +1,9 @@
+<?php
+require("class/class.php");
+$cond= new conductor;
+$vehi= new Vehiculo;
+$veh=$vehi->queryvehiculo();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -26,6 +32,13 @@
                     <td>
                         <select name="vehiculo" class="inp">
                             <option>Seleccione el vehiculo</option>
+                            <?php
+                                for($i=0;$i<sizeof($veh);$i++){
+                            ?>
+                            <option value="<?php echo $veh[$i]['idVehiculo']; ?>"><?php echo $veh[$i]['Placa']; ?></option>
+                            <?php
+                            }
+                            ?>
                         </select>
                     </td>
                 </tr>
@@ -36,3 +49,20 @@
     </div>
 </body>
 </html>
+<?php
+if(isset($_POST['registrar']))
+{
+    $condc=$cond->queryconductor($_POST['idcond']);  
+    if(sizeof($condc)==0)
+    {
+        $inf[]=$_POST;
+        $con=$cond->InsertCondut($inf);    
+    }else
+    {
+        echo "<script type='text/javascript'>
+        alert('El conductor ya se encuentra registrado');
+        window.location='../CambulosMantenimiento/crudconductor.php';
+        </script>";
+    }
+}
+?>
