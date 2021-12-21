@@ -19,14 +19,31 @@ class conductor extends Conexion
     }
     public function InsertCondut($inf)
     {
+        $formato[]=('.pdf');
+        $namefile= $_FILES['filelicencia']['name'];
+        $nameTmpfile=$_FILES['filelicencia']['tmp_name'];
+        $ext=substr($namefile, strrpos($namefile,'.'));
+        if (in_array($ext,$formato))
+        {
+            if(move_uploaded_file($nameTmpfile,"documentos/cedula/".' '.$inf[0]['idcond'].' '.$inf[0]['nom'].' '.$inf[0]['ape'].'.pdf'))
+            {   
+            }
+        }else{
+            echo "<script type='text/javascript'>
+                alert('ERROR El archivo que esta cargando debe ser PDF');
+                window.location='../CambulosMantenimiento/crudconductor.php';
+                </script>";
+        }
+        $ruta="documentos/cedula/$namefile";
         $id=$inf[0]['idcond'];
         $nom=$inf[0]['nom'];
         $ap=$inf[0]['ape'];
         $tel=$inf[0]['tel'];
         $cat=$inf[0]['categolicencia'];
         $date=$inf[0]['vencelicencia'];
-        $file=$inf[0]['archlicencia'];
+        $file=$ruta;
         $veh=$inf[0]['vehiculo'];
+
         if($id=="" or($nom=="") or($ap=="") or($tel=="") or($cat=="") or($date=="") or($file=="") or($veh=="") )
             {
                 echo "<script type='text/javascript'>
@@ -39,10 +56,10 @@ class conductor extends Conexion
                 $sql="CALL inserconductor(:id, :nom, :ap, :tel, :cat, :date, :file, :veh)";
                 $rest=$this->conex->prepare($sql);
                 $rest->execute(array('id'=>$id, 'nom'=>$nom, 'ap'=>$ap, 'tel'=>$tel, 'cat'=>$cat, 'date'=>$date, 'file'=>$file, 'veh'=>$veh,));
-                /*echo "<script type='text/javascript'>
+                echo "<script type='text/javascript'>
                 alert('Registro realizado exitosamente');
                 window.location='../CambulosMantenimiento/crudconductor.php';
-                </script>";*/
+                </script>";
             }
     }
 }
