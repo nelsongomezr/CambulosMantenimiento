@@ -25,7 +25,7 @@ class conductor extends Conexion
         $ext=substr($namefile, strrpos($namefile,'.'));
         if (in_array($ext,$formato))
         {
-            if(move_uploaded_file($nameTmpfile,"documentos/cedula/".' '.$inf[0]['idcond'].' '.$inf[0]['nom'].' '.$inf[0]['ape'].'.pdf'))
+            if(move_uploaded_file($nameTmpfile,"documentos/licencia/".' '.$inf[0]['idcond'].' '.$inf[0]['nom'].' '.$inf[0]['ape'].'.pdf'))
             {   
             }
         }else{
@@ -34,7 +34,7 @@ class conductor extends Conexion
                 window.location='../CambulosMantenimiento/crudconductor.php';
                 </script>";
         }
-        $ruta="documentos/cedula/$namefile";
+        $ruta="documentos/licencia/".' '.$inf[0]['idcond'].' '.$inf[0]['nom'].' '.$inf[0]['ape'].'.pdf';
         $id=$inf[0]['idcond'];
         $nom=$inf[0]['nom'];
         $ap=$inf[0]['ape'];
