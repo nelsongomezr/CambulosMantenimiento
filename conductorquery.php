@@ -59,7 +59,7 @@ if(isset($_POST['condoc']))
                     <td><?php echo $quer[$i]['VenceLicencia']?></td>
                     <td><a href="echo <?php $quer[$i]['archlicencia']?>">ver</a></td>
                     <td><?php echo $quer[$i]['Placa']?></td>
-                    <td><a><img src="img/editar usuario.png" alt="Editar usuario" width="30"></a></td>
+                    <td><?php echo'<a href=conductorupdate.php?id='.$id.'>'; ?><img src="img/editar usuario.png" alt="Editar usuario" width="30"></a></td>
                     <td><a><img src="img/eliminar usuario.png" alt="Eliminar usuario" width="30"></a></td>
                 </tr>
                 <?php

@@ -19,6 +19,7 @@ class conductor extends Conexion
     }
     public function InsertCondut($inf)
     {
+        print_r($inf);
         $formato[]=('.pdf');
         $namefile= $_FILES['filelicencia']['name'];
         $nameTmpfile=$_FILES['filelicencia']['tmp_name'];
@@ -61,6 +62,33 @@ class conductor extends Conexion
                 window.location='../CambulosMantenimiento/crudconductor.php';
                 </script>";
             }
+    }
+    public function updateconductor($update)
+    {
+        print_r($update);
+        $id=$update[0]['id'];
+        $nom=$update[0]['nom'];
+        $ap=$update[0]['ap'];
+        $tel=$update[0]['tel'];
+        $catlicen=$update[0]['catlicen'];
+        $path="c/";
+        $venlicen=$update[0]['venlicen'];
+        $idveh=$update[0]['idveh'];
+
+        if($id=="" or($nom=="") or($ap=="") or($tel=="") or($catlicen=="") or($venlicen=="") or($idveh==""))
+        {
+            echo "<script type='text/javascript'>
+                alert('ERROR El archivo que esta cargando debe ser PDF');
+                window.location='../CambulosMantenimiento/crudconductor.php';
+                </script>";
+        }else
+        {
+            $sql="call conductorupdate(:id, :nom, :ap, :tel, :catlicen, :venlicen, :path, :idveh, :rol :estado )";
+            $rest=$this->conex->prepare($sql);
+            $rest->exwcute(array('id'=>$id, 'nom'=>$nom, 'ap'=>$ap, 'tel'=>$tel, 'catlicen'=>$catlicen, 'venlicen'=>$venlicen, ':path'=>$path, 'idveh'=>$idveh  ));
+        }
+        
+
     }
 }
 class Vehiculo extends Conexion
