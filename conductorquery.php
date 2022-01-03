@@ -3,9 +3,42 @@ require('class/class.php');
 $query=new conductor;
 if(isset($_POST['condoc']))
 {
-    $id=$_POST['doc'];
-    $quer=$query->queryconductor($id);
-    print_r($quer);
+    if($_POST['consulta']==1)
+    {
+        $id=$_POST['doc'];
+        $quer=$query->queryconductor($id);
+        print_r($quer);
+        if(sizeof($quer)=="")
+        {
+            echo "<script type='text/javascript'>
+                alert('El documento de identificacion no esta registrado');
+                window.location='../CambulosMantenimiento/conductorquery.php';
+                </script>";
+        }
+    }
+    if($_POST['consulta']==2)
+    {
+        $nom=$_POST['doc'].'%';
+        $quer=$query->queryconductorname($nom);
+        if(sizeof($quer)=="")
+        {
+            echo "<script type='text/javascript'>
+                alert('El nombre no esta registrado');
+                window.location='../CambulosMantenimiento/conductorquery.php';
+                </script>";
+        }
+    }
+    if($_POST['consulta']=="")
+    {
+        echo "<script type='text/javascript'>
+                alert('debe seleccionar el tipo de busqueda');
+                window.location='../CambulosMantenimiento/conductorquery.php';
+                </script>";
+    }
+}
+if(isset($_POST['congeneral']))
+{
+    $quer=$query->queryallconductor();
 }
 ?>
 
@@ -24,9 +57,11 @@ if(isset($_POST['condoc']))
     <div class="row">
             <h1>CONSULTA CONDUCTORES</h1>
             <form method="POST">
-                <input type="number" name="doc" placeholder="Ingrese el documento" class="bottom1">
-                <input type="submit" name="condoc" value="Buscar" class="bottom1"><br><br>
-                <input type="submit" name="congeneral" value="Ver todos los conductores" class="bottom1">
+                <input type="text" name="doc" placeholder="Digtite nombre o ducumento" class="inp"><br>
+                Por identificacion: <input type="radio" name="consulta" value="1">
+                Por nombre:         <input type="radio" name="consulta" value="2"><br>
+                <input type="submit" name="condoc" value="Buscar" class="bottom">   
+                <input type="submit" name="congeneral" value="Ver todos los conductores" class="bottom">
             </form>
     </div>
     
@@ -47,6 +82,8 @@ if(isset($_POST['condoc']))
                     <th>Eliminar</th>
                 </thead>
                 <?php
+                if(isset($_POST['condoc']) or(isset($_POST['congeneral'])))
+                {
                     for($i=0;$i<sizeof($quer);$i++)
                     {
                 ?>
@@ -57,12 +94,13 @@ if(isset($_POST['condoc']))
                     <td><?php echo $quer[$i]['TelelfonoConductor']?></td>
                     <td><?php echo $quer[$i]['CategoLicencia']?></td>
                     <td><?php echo $quer[$i]['VenceLicencia']?></td>
-                    <td><a href="echo <?php $quer[$i]['archlicencia']?>">ver</a></td>
+                    <td><a href="<?php echo $quer[$i]['archlicencia'];?>">ver</a></td>
                     <td><?php echo $quer[$i]['Placa']?></td>
-                    <td><?php echo'<a href=conductorupdate.php?id='.$id.'>'; ?><img src="img/editar usuario.png" alt="Editar usuario" width="30"></a></td>
+                    <td><?php echo'<a href=conductorupdate.php?id='.$id=$quer[$i]['idConductor'].'>'; ?><img src="img/editar usuario.png" alt="Editar usuario" width="30"></a></td>
                     <td><a><img src="img/eliminar usuario.png" alt="Eliminar usuario" width="30"></a></td>
                 </tr>
                 <?php
+                }
                 }
                 ?>
             </table>

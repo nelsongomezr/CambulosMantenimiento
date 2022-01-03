@@ -5,7 +5,6 @@ $queryv=new vehiculo;
 $id=$_GET['id'];
 $quer= $query->queryconductor($id);
 $queryv=$queryv->queryvehiculo();
-print_r($queryv);
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -29,6 +28,7 @@ print_r($queryv);
                 <tr><td>Telefono: </td><td><input type="text" name="tel" value="<?php echo $quer[0]['TelelfonoConductor'];?>" class="inp"></td></tr>
                 <tr><td>Categoria licencia</td><td><input type="text" name="catlicen" value="<?php echo $quer[0]['CategoLicencia'];?>" class="inp"></td></tr>
                 <tr><td>Fecha vencimiento licencia</td><td><input type="text" name="venlicen" value="<?php echo $quer[0]['VenceLicencia'];?>" class="inp"></td></tr>
+                <input type="hidden" name="rol" value="<?php echo $quer[0]['Rol_idRol']; ?>">
                 <tr>
                     <td>Asignar vehiculo</td>  
                     <td>
@@ -53,6 +53,8 @@ print_r($queryv);
 </body>
 </html>
 <?php
- $update[]=$_POST;
- $que=$query->updateconductor($update);
+if(isset($_POST['update'])){
+    $update[]=$_POST;
+    $que=$query->updateconductor($update);
+}
 ?>
