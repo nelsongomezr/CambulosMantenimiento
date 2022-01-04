@@ -7,7 +7,6 @@ if(isset($_POST['condoc']))
     {
         $id=$_POST['doc'];
         $quer=$query->queryconductor($id);
-        print_r($quer);
         if(sizeof($quer)=="")
         {
             echo "<script type='text/javascript'>
@@ -97,7 +96,7 @@ if(isset($_POST['congeneral']))
                     <td><a href="<?php echo $quer[$i]['archlicencia'];?>">ver</a></td>
                     <td><?php echo $quer[$i]['Placa']?></td>
                     <td><?php echo'<a href=conductorupdate.php?id='.$id=$quer[$i]['idConductor'].'>'; ?><img src="img/editar usuario.png" alt="Editar usuario" width="30"></a></td>
-                    <td><a><img src="img/eliminar usuario.png" alt="Eliminar usuario" width="30"></a></td>
+                    <td><?php echo'<a href=conductordelete.php?id='.$id=$quer[$i]['idConductor'].'>'; ?><img src="img/eliminar usuario.png" alt="Eliminar usuario" width="30"></a></td>
                 </tr>
                 <?php
                 }

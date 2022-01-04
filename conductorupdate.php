@@ -44,7 +44,7 @@ $queryv=$queryv->queryvehiculo();
                         </select>
                     </td>
                 </tr>
-                <tr><td>Cargue PDF de la licencia:</td><td><input type="file" name="path" value="" class="inp"></td></tr> 
+                <tr><td>Cargue PDF de la licencia: </td><td><input type="file" name="cargue" class="inp"></td></tr>
                <tr><td></td><td><input type="submit" name="update" value="ACTUALIZAR" class="bottom"></td></tr>
             </form>
         </table>

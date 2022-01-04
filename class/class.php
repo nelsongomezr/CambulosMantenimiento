@@ -46,7 +46,7 @@ class conductor extends Conexion
         $ext=substr($namefile, strrpos($namefile,'.'));
         if (in_array($ext,$formato))
         {
-            if(move_uploaded_file($nameTmpfile,"CambulosMantenimiento/documentos/licencia/".' '.$inf[0]['idcond'].' '.$inf[0]['nom'].' '.$inf[0]['ape'].'.pdf'))
+            if(move_uploaded_file($nameTmpfile,"documentos/licencia/".' '.$inf[0]['idcond'].' '.$inf[0]['nom'].' '.$inf[0]['ape'].'.pdf'))
             {   
             }
         }else{
@@ -55,7 +55,6 @@ class conductor extends Conexion
                 window.location='../CambulosMantenimiento/crudconductor.php';
                 </script>";
         }
-        //$ruta="documentos/licencia/".' '.$inf[0]['idcond'].' '.$inf[0]['nom'].' '.$inf[0]['ape'].'.pdf';
         $ruta="documentos/licencia/".' '.$inf[0]['idcond'].' '.$inf[0]['nom'].' '.$inf[0]['ape'].'.pdf';
         $id=$inf[0]['idcond'];
         $nom=$inf[0]['nom'];
@@ -78,37 +77,37 @@ class conductor extends Conexion
                 $sql="CALL inserconductor(:id, :nom, :ap, :tel, :cat, :date, :file, :veh)";
                 $rest=$this->conex->prepare($sql);
                 $rest->execute(array('id'=>$id, 'nom'=>$nom, 'ap'=>$ap, 'tel'=>$tel, 'cat'=>$cat, 'date'=>$date, 'file'=>$file, 'veh'=>$veh,));
-                /*echo "<script type='text/javascript'>
+                echo "<script type='text/javascript'>
                 alert('Registro realizado exitosamente');
                 window.location='../CambulosMantenimiento/crudconductor.php';
-                </script>";*/
+                </script>";
             }
     }
     public function updateconductor($update)
     {
-       /*$formato[]=('.pdf');
-        $namefile= $_FILES['filelicencia']['name'];
-        $nameTmpfile=$_FILES['filelicencia']['tmp_name'];
+        print_r($_FILES);
+        $formato[]=('.pdf');
+        $namefile= $_FILES['cargue']['name'];
+        $nameTmpfile=$_FILES['cargue']['tmp_name'];
         $ext=substr($namefile, strrpos($namefile,'.'));
         if (in_array($ext,$formato))
         {
-            if(move_uploaded_file($nameTmpfile,"documentos/licencia/".' '.$update[0]['idcond'].' '.$update[0]['nom'].' '.$update[0]['ape'].'.pdf'))
+            if(move_uploaded_file($nameTmpfile,"documentos/licencia/".' '.$update[0]['id'].' '.$update[0]['nom'].' '.$update[0]['ap'].'.pdf'))
             {   
             }
         }else{
-            /*echo "<script type='text/javascript'>
+            echo "<script type='text/javascript'>
                 alert('ERROR El archivo que esta cargando debe ser PDF');
                 window.location='../CambulosMantenimiento/conductorquery.php';
-                </script>";*/
-        //}
-        //$ruta="documentos/licencia/".' '.$inf[0]['idcond'].' '.$inf[0]['nom'].' '.$inf[0]['ape'].'.pdf';
-        print_r($update);
+                </script>";
+        }
+        $ruta="documentos/licencia/".' '.$update[0]['id'].' '.$update[0]['nom'].' '.$update[0]['ap'].'.pdf';
         $id=$update[0]['id'];
         $nom=$update[0]['nom'];
         $ap=$update[0]['ap'];
         $tel=$update[0]['tel'];
         $catlicen=$update[0]['catlicen'];
-        $path="c/";
+        $path=$ruta;
         $venlicen=$update[0]['venlicen'];
         $idveh=$update[0]['idveh'];
         $rol=$update[0]['rol'];
@@ -130,8 +129,22 @@ class conductor extends Conexion
                 window.location='../CambulosMantenimiento/conductorquery.php';
                 </script>";*/
         }
+    
     }
+    public function deleteconductor($id)
+    {
+        
+        $sql="CALL conductordelete(:id)";
+        $rest=$this->conex->prepare($sql);
+        $rest->execute(array('id'=>$id));
+        echo "<script type='text/javascript'>
+                alert('Registro eliminado exitosamente');
+                window.location='../CambulosMantenimiento/conductorquery.php';
+                </script>";
+    }
+    
 }
+
 class Vehiculo extends Conexion
 {
     private $query=array();
