@@ -124,10 +124,10 @@ class conductor extends Conexion
             $rest=$this->conex->prepare($sql);
             $rest->execute(array('id'=>$id, 'nom'=>$nom, 'ap'=>$ap, 'tel'=>$tel, 'catlicen'=>$catlicen, 'venlicen'=>$venlicen, 'path'=>$path, 'idveh'=>$idveh, 'rol'=>$rol));
 
-            /*echo "<script type='text/javascript'>
+            echo "<script type='text/javascript'>
                 alert('Se actualizo la informaciuon correctamente');
                 window.location='../CambulosMantenimiento/conductorquery.php';
-                </script>";*/
+                </script>";
         }
     
     }
