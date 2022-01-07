@@ -162,7 +162,12 @@ class Vehiculo extends Conexion
         }
         return $this->query;
     }
+    public function insertvehiculo($info)
+    {
+        print_r($info);
+        
 
+    }
 }
 
 ?>
