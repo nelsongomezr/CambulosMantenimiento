@@ -22,12 +22,16 @@ $queryv=$queryv->queryvehiculo();
             <h1>ACTUALIZACION DATOS CONDUCTOR</h1>
             <table>
             <form method="POST" enctype="multipart/form-data" class="form">
-                <tr><td>Identificacion: </td><td><input type="text" name="id" value="<?php echo $quer[0]['idConductor'];?>" class="inp"></td></tr>
+                <tr><td>Documento de Identidad: </td><td><input type="text" name="id" value="<?php echo $quer[0]['idConductor'];?>" class="inp"></td></tr>
                 <tr><td>Nonbres: </td><td><input type="text" name="nom" value="<?php echo $quer[0]['Nombre'];?>" class="inp"></td></tr>
                 <tr><td>Apellidos: </td><td><input type="text" name="ap" value="<?php echo $quer[0]['Apellido'];?>" class="inp"></td></tr>
                 <tr><td>Telefono: </td><td><input type="text" name="tel" value="<?php echo $quer[0]['TelelfonoConductor'];?>" class="inp"></td></tr>
                 <tr><td>Categoria licencia</td><td><input type="text" name="catlicen" value="<?php echo $quer[0]['CategoLicencia'];?>" class="inp"></td></tr>
-                <tr><td>Fecha vencimiento licencia</td><td><input type="text" name="venlicen" value="<?php echo $quer[0]['VenceLicencia'];?>" class="inp"></td></tr>
+                <tr><td>Fecha vencimiento licencia</td><td><input type="date" name="venlicen" value="<?php echo $quer[0]['VenceLicencia'];?>" class="inp"></td></tr>
+                <tr><td>Fecha inscripcion RUNT </td><td><input type="date" name="frunt" value="<?php echo $quer[0]['InscripRUNT'];?>" class="inp"></td></tr>
+                <tr><td>Edad: </td><td><input type="number" name="edad" value="<?php echo $quer[0]['Edad'];?>"  class="inp"></td></tr>
+                <tr><td>Tipo de Contrato: </td><td><input type="text" name="tcon" value="<?php echo $quer[0]['TipoContrato'];?>" class="inp"></td></tr>
+                <tr><td>Años experiencia: </td><td><input type="text" name="expe" value="<?php echo $quer[0]['ExpConduccion'];?>" class="inp"></td></tr>
                 <input type="hidden" name="rol" value="<?php echo $quer[0]['Rol_idRol']; ?>">
                 <tr>
                     <td>Asignar vehiculo</td>  

@@ -7,6 +7,7 @@ if(isset($_POST['condoc']))
     {
         $id=$_POST['doc'];
         $quer=$query->queryconductor($id);
+       
         if(sizeof($quer)=="")
         {
             echo "<script type='text/javascript'>
