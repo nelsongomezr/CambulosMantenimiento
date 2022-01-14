@@ -1,5 +1,39 @@
 <?php 
 require("conexion.php");
+class login extends Conexion
+{
+    private $info=array();
+    public function log($info)
+    {
+        if($info[0]['usuario']=="" or($info[0]['pass']==""))
+        {
+            /*echo "<script type='text/javascript'>
+            alert('Debe diligenciar todos los campos');
+            window.location='index.php';
+            </script>";*/
+        }else{
+            $_SESSION['usuario']=$info[0]['usuario'];
+            $querycon = new conductor;
+            $queryconduc = $querycon->queryconductor($_SESSION['usuario']);
+            if($info[0]['usuario'] == $queryconduc[0]['idConductor'] and $info[0]['pass'] == $queryconduc[0]['contrasena'] )
+            {
+                if($info[0]['NombreRol']="CONDUCTOR"){
+                header('location:homeconductor.php');
+            }elseif($info[0]['NombreRol']="ADMIN"){
+                //header('location:homeadmin.php');
+            }elseif($info[0]['NombreRol']="ADMINISTRATIVO"){
+                //header('location:homeadministrativo.php');
+            }
+            }else{
+                echo "<script type='text/javascript'>
+                alert('No coiciden las credenciales');
+                window.location='index.php';
+                </script>";
+            }
+        }
+        
+    }
+}
 class conductor extends Conexion
 {
     private $querycond=array();
