@@ -7,29 +7,52 @@ class login extends Conexion
     {
         if($info[0]['usuario']=="" or($info[0]['pass']==""))
         {
-            /*echo "<script type='text/javascript'>
+            echo "<script type='text/javascript'>
             alert('Debe diligenciar todos los campos');
             window.location='index.php';
-            </script>";*/
-        }else{
-            $_SESSION['usuario']=$info[0]['usuario'];
-            $querycon = new conductor;
-            $queryconduc = $querycon->queryconductor($_SESSION['usuario']);
-            if($info[0]['usuario'] == $queryconduc[0]['idConductor'] and $info[0]['pass'] == $queryconduc[0]['contrasena'] )
+            </script>";
+        }
+        else{
+            $querycond= new conductor;
+            $querycon=$querycond->queryconductor($info[0]['usuario']);
+            if(sizeof($querycon)==0)
             {
-                if($info[0]['NombreRol']="CONDUCTOR"){
-                header('location:homeconductor.php');
-            }elseif($info[0]['NombreRol']="ADMIN"){
-                //header('location:homeadmin.php');
-            }elseif($info[0]['NombreRol']="ADMINISTRATIVO"){
-                //header('location:homeadministrativo.php');
+                session_start();
+                $_SESSION['USUARIO']=$info[0]['usuario'];
+                $queryuser= new user;
+                $queryuse=$queryuser->queryuser($_SESSION['USUARIO']);
+                if(sizeof($queryuse)>0)
+                {
+                    if($queryuse[0]['idUsuario']==$info[0]['usuario'] and $queryuse[0]['contrasena']==$info[0]['pass'] and $queryuse[0]['NombreRol']=="ADMINISTRATIVO")
+                    {
+                        header('location:homeadministrativo.php');
+                    }elseif($queryuse[0]['idUsuario']==$info[0]['usuario'] and $queryuse[0]['contrasena']==$info[0]['pass'] and $queryuse[0]['NombreRol']=="ADMIN")
+                    {
+                        header('location:homeadmin.php');
+                    }else
+                    {
+                        echo "<script type='text/javascript'>
+                        alert('las credenciales no coinciden');
+                        window.location='index.php';
+                        </script>";
+                    }
+                }
+            }else
+            {
+                if($querycon[0]['idConductor']==$info[0]['usuario'] and $querycon[0]['contrasena']==$info[0]['pass'] and $querycon[0]['NombreRol']=="CONDUCTOR")
+                {
+                    header('location:homeconductor.php');
+                }else
+                {
+                    echo "<script type='text/javascript'>
+                    alert('las credenciales no coinciden');
+                    window.location='index.php';
+                    </script>";
+                }
+                
             }
-            }else{
-                echo "<script type='text/javascript'>
-                alert('No coiciden las credenciales');
-                window.location='index.php';
-                </script>";
-            }
+            
+
         }
         
     }
@@ -220,6 +243,24 @@ class Vehiculo extends Conexion
         print_r($info);
         
 
+    }
+}
+class user extends Conexion
+{
+    private $use=array();
+    private $us=array();
+    private $u=array();
+    
+    public function queryuser($id)
+    {
+        $sql="SELECT * FROM `usuario` INNER JOIN rol ON USUARIO.Rol_idRol=rol.idRol WHERE usuario.idUsuario=:id";
+        $rest=$this->conex->prepare($sql);
+        $rest->execute(array('id'=>$id));
+        while($res=$rest->fetch(PDO::FETCH_ASSOC))
+        {
+            $this->use[]=$res;
+        }
+        return $this->use;
     }
 }
 
