@@ -126,7 +126,6 @@ class conductor extends Conexion
         $aexp=$inf[0]['expe'];
         $daterunt=$inf[0]['frunt'];
 
-
         if($id=="" or($nom=="") or($ap=="") or($tel=="") or($cat=="") or($date=="") or($file=="") or($veh=="") or($ed=="") or($tcon=="") or($aexp=="") or($daterunt==""))
             {
                 echo "<script type='text/javascript'>
