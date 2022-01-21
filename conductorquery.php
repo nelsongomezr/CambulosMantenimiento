@@ -106,11 +106,7 @@ if(isset($_POST['congeneral']))
                     <th scope="col">Identificacion</th>
                     <th scope="col">Nombre</th>
                     <th scope="col">Apellido</th>
-                    <th scope="col">Telefono</th>
-                    <th scope="col">Categoria licencia</th>
-                    <th scope="col">Fecha vencimiento</th>
-                    <th scope="col">Ver licencia</th>
-                    <th scope="col">Vehiculo</th>
+                    <th scope="col">informacion completa</th>
                     <th scope="col">Modificar</th>
                     <th scope="col">Eliminar</th>
                 </thead>
@@ -123,12 +119,8 @@ if(isset($_POST['congeneral']))
                 <tr>
                     <td scope="row"><?php echo $quer[$i]['idConductor']?></td>
                     <td scope="row"><?php echo $quer[$i]['Nombre']?></td>
-                    <td scope="row"><?php echo $quer[$i]['Apellido']?></td>
-                    <td scope="row"><?php echo $quer[$i]['TelelfonoConductor']?></td>
-                    <td scope="row"><?php echo $quer[$i]['CategoLicencia']?></td>
-                    <td scope="row"><?php echo $quer[$i]['VenceLicencia']?></td>
-                    <td scope="row"><a href="<?php echo $quer[$i]['archlicencia'];?>">ver</a></td>
-                    <td scope="row"><?php echo $quer[$i]['Placa']?></td>
+                    <td scope="row"><?php echo $quer[$i]['Apellido']?></td>     
+                    <td scope="row"><?php echo'<a href=infoconductor.php?id='.$id=$quer[$i]['idConductor'].'>'; ?>ver mas</a></td>
                     <td scope="row"><?php echo'<a href=conductorupdate.php?id='.$id=$quer[$i]['idConductor'].'>'; ?><img src="img/editar usuario.png" alt="Editar usuario" width="30"></a></td>
                     <td scope="row"><?php echo'<a href=conductordelete.php?id='.$id=$quer[$i]['idConductor'].'>'; ?><img src="img/eliminar usuario.png" alt="Eliminar usuario" width="30"></a></td>
                 </tr>

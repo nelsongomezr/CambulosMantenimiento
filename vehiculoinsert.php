@@ -142,4 +142,7 @@ $vehiculo= new Vehiculo;
         $inst=$vehiculo->insertvehiculo($info);
     }
 
+    $a=12345;
+    echo $aa=crypt(10,$a);
+
 ?>

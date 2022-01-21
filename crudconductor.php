@@ -34,7 +34,9 @@ $veh=$vehi->queryvehiculo();
                     <div class="card-header">
                     <h1>REGISTRO CONDUCTORES</h1>
                     </div>
-                <form method="POST" enctype="multipart/form-data" class="form">
+                </div>
+                <div class="card-footer text-muted bg-dark">
+                <form method="POST" enctype="multipart/form-data">
                     <div class="mb-3">
                         <label class="form-label">Documento de Identidad:</label>
                         <input type="number" name="idcond" placeholder="Documento identificacion" class="form-control w-50">
@@ -89,6 +91,10 @@ $veh=$vehi->queryvehiculo();
                         </select>
                     </div>
                     <div class="mb-3">
+                        <label class="form-label">Cargue PDF de la licencia:</label>
+                        <input type="file" name="filelicencia" class="form-control w-50">
+                    </div>
+                    <div class="mb-3">
                         <input type="submit" name="registrar" value="Registrar" class="btn btn-dark w-50">
                     </div>
                     </form>
@@ -113,7 +119,7 @@ if(isset($_POST['registrar']))
     }else
     {
         echo "<script type='text/javascript'>
-        alert('El conductor ya se encuentra registrado');
+        alert('El usuario que intenta registrar ya exite');
         window.location='../CambulosMantenimiento/crudconductor.php';
         </script>";
     }

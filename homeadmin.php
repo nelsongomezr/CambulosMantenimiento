@@ -11,6 +11,7 @@
     require('class/class.php');
     $queryuser= new user;
     $queryuse=$queryuser->queryuser($_SESSION['USUARIO']);
+
 ?>
 
 <!doctype html>

@@ -23,11 +23,14 @@ class login extends Conexion
                 $queryuse=$queryuser->queryuser($_SESSION['USUARIO']);
                 if(sizeof($queryuse)>0)
                 {
-                    if($queryuse[0]['idUsuario']==$info[0]['usuario'] and $queryuse[0]['contrasena']==$info[0]['pass'] and $queryuse[0]['NombreRol']=="ADMINISTRATIVO")
+                    $pass=crypt(10,$info[0]['pass']);
+                    if($queryuse[0]['idUsuario']==$info[0]['usuario'] and $queryuse[0]['contrasena']==$pass and $queryuse[0]['NombreRol']=="ADMINISTRATIVO")
                     {
+                        $_SESSION['rol']=$queryuse[0]['NombreRol'];
                         header('location:homeadministrativo.php');
-                    }elseif($queryuse[0]['idUsuario']==$info[0]['usuario'] and $queryuse[0]['contrasena']==$info[0]['pass'] and $queryuse[0]['NombreRol']=="ADMIN")
+                    }elseif($queryuse[0]['idUsuario']==$info[0]['usuario'] and $queryuse[0]['contrasena']==$pass and $queryuse[0]['NombreRol']=="ADMIN")
                     {
+                        $_SESSION['rol']=$queryuse[0]['NombreRol'];
                         header('location:homeadmin.php');
                     }else
                     {
@@ -39,8 +42,12 @@ class login extends Conexion
                 }
             }else
             {
-                if($querycon[0]['idConductor']==$info[0]['usuario'] and $querycon[0]['contrasena']==$info[0]['pass'] and $querycon[0]['NombreRol']=="CONDUCTOR")
+                session_start();
+                $_SESSION['USUARIO']=$info[0]['usuario'];
+                $pass=crypt(10,$info[0]['pass']);
+                if($querycon[0]['idConductor']==$info[0]['usuario'] and $querycon[0]['contrasena']==$pass and $querycon[0]['NombreRol']=="CONDUCTOR")
                 {
+                    $_SESSION['rol']=$querycon[0]['NombreRol'];
                     header('location:homeconductor.php');
                 }else
                 {
@@ -97,6 +104,7 @@ class conductor extends Conexion
     }
     public function InsertCondut($inf)
     {
+       $quercond= new conductor;
         $formato[]=('.pdf');
         $namefile= $_FILES['filelicencia']['name'];
         $nameTmpfile=$_FILES['filelicencia']['tmp_name'];
@@ -107,10 +115,10 @@ class conductor extends Conexion
             {   
             }
         }else{
-            echo "<script type='text/javascript'>
+            /*echo "<script type='text/javascript'>
                 alert('ERROR El archivo que esta cargando debe ser PDF');
                 window.location='../CambulosMantenimiento/crudconductor.php';
-                </script>";
+                </script>";*/
         }
         $ruta="documentos/licencia/".' '.$inf[0]['idcond'].' '.$inf[0]['nom'].' '.$inf[0]['ape'].'.pdf';
         $id=$inf[0]['idcond'];
@@ -125,6 +133,7 @@ class conductor extends Conexion
         $tcon=$inf[0]['tcon'];
         $aexp=$inf[0]['expe'];
         $daterunt=$inf[0]['frunt'];
+        $querc=$quercond->queryconductor($id);
 
         if($id=="" or($nom=="") or($ap=="") or($tel=="") or($cat=="") or($date=="") or($file=="") or($veh=="") or($ed=="") or($tcon=="") or($aexp=="") or($daterunt==""))
             {
@@ -132,11 +141,13 @@ class conductor extends Conexion
                 alert('Debe diligenciar todos los campos');
                 window.location='../CambulosMantenimiento/crudconductor.php';
                 </script>";
+
             }else
             {                             
-                $sql="CALL inserconductor(:id, :nom, :ap, :tel, :cat, :date, :file, :veh, :ed, :tcon, :aexp, :daterunt)";
+                $pass=crypt(10,$id);
+                $sql="CALL inserconductor(:id, :nom, :ap, :tel, :cat, :date, :file, :veh, :ed, :tcon, :aexp, :daterunt, :pass)";
                 $rest=$this->conex->prepare($sql);
-                $rest->execute(array('id'=>$id, 'nom'=>$nom, 'ap'=>$ap, 'tel'=>$tel, 'cat'=>$cat, 'date'=>$date, 'file'=>$file, 'veh'=>$veh, 'ed'=>$ed, 'tcon'=>$tcon, 'aexp'=>$aexp, 'daterunt'=>$daterunt));
+                $rest->execute(array('id'=>$id, 'nom'=>$nom, 'ap'=>$ap, 'tel'=>$tel, 'cat'=>$cat, 'date'=>$date, 'file'=>$file, 'veh'=>$veh, 'ed'=>$ed, 'tcon'=>$tcon, 'aexp'=>$aexp, 'daterunt'=>$daterunt, 'pass'=>$pass));
                 echo "<script type='text/javascript'>
                 alert('Registro realizado exitosamente');
                 window.location='../CambulosMantenimiento/crudconductor.php';
@@ -195,13 +206,16 @@ class conductor extends Conexion
             conductor.ExpConduccion=:expe,
             conductor.InscripRUNT=:frunt 
             WHERE conductor.idConductor=:id";
-            
+            $querycond= new  conductor;
+            $Quercond=$querycond->queryconductor($id);
+            print_r($Quercond);
             $rest=$this->conex->prepare($sql);
             $rest->execute(array('id'=>$id, 'nom'=>$nom, 'ap'=>$ap, 'tel'=>$tel, 'cat'=>$cat,
             'flicen'=>$flicen, 'files'=>$ruta, 'idveh'=>$idveh, 'rol'=>$rol, 'ed'=>$ed, 'tcon'=>$tcon, 'expe'=>$aexp, 'frunt'=>$frunt));
+            $_SESSION['varid']=$Quercond[0]['idConductor'];
             echo "<script type='text/javascript'>
             alert('Informacion actualizada correctamente.');
-            window.location='../CambulosMantenimiento/conductorquery.php';
+            window.location='../CambulosMantenimiento/infoconductor.php ';
             </script>";
         }
         
@@ -262,5 +276,20 @@ class user extends Conexion
         return $this->use;
     }
 }
-
+class Rol extends Conexion
+{
+    public function navrol($rol)
+    {
+        if($_SESSION['rol']=='ADMIN')
+      {
+        require('partials/navadmin.php');
+      }elseif($_SESSION['rol']=='ADMINISTRATIVO')
+      {
+        require('partials/navadministrativo.php');
+      }elseif($_SESSION['rol']=='CONDUCTOR')
+      {
+        require('partials/navconductor.php');
+      }
+    }
+}
 ?>

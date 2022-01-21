@@ -9,6 +9,5 @@ if($_SESSION==null || $_SESSION=="")
     </script>";
     die();
 }
-print_r($_SESSION);
 
 ?>
