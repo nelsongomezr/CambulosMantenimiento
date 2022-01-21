@@ -251,6 +251,20 @@ class Vehiculo extends Conexion
         }
         return $this->queryvehi;
     }
+    public function queryvehiculoplaca($pla)
+    {
+        $sql="SELECT * FROM `vehiculo`
+        INNER JOIN usovheiculo
+        ON vehiculo.UsoVheiculo_IdUso=usovheiculo.IdUso
+        WHERE vehiculo.Placa=:pla";
+        $rest=$this->conex->prepare($sql);
+        $rest->execute(array('pla'=>$pla));
+        while($res=$rest->fetch(PDO::FETCH_ASSOC))
+        {
+            $this->querveh[]=$res;
+        }
+        return $this->querveh;
+    }
     public function insertvehiculo($info)
     {
         print_r($info);
