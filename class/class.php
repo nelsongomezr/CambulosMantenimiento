@@ -115,10 +115,10 @@ class conductor extends Conexion
             {   
             }
         }else{
-            /*echo "<script type='text/javascript'>
+                echo "<script type='text/javascript'>
                 alert('ERROR El archivo que esta cargando debe ser PDF');
                 window.location='../CambulosMantenimiento/crudconductor.php';
-                </script>";*/
+                </script>";
         }
         $ruta="documentos/licencia/".' '.$inf[0]['idcond'].' '.$inf[0]['nom'].' '.$inf[0]['ape'].'.pdf';
         $id=$inf[0]['idcond'];
@@ -240,6 +240,157 @@ class Vehiculo extends Conexion
     private $querveh=array();
     private $queve=array();
 
+    public function insertvehiculo($info)
+    {
+        print_r($info).'<br>';
+        print_r($_FILES);
+        $formato[]=('.pdf');
+
+        if(isset($_FILES['filesoat']))
+        {
+            $namefile= $_FILES['filesoat']['name'];
+            $nameTmpfile=$_FILES['filesoat']['tmp_name'];
+            $ext=substr($namefile, strrpos($namefile,'.'));
+            if (in_array($ext,$formato))
+            {
+                if(move_uploaded_file($nameTmpfile,"documentos/vehiculo/soat/".' '.$info['placa'].' '.$info['nsoat'].' '.$info['fsoat'].'.pdf'))
+                {   
+                }
+            }else{
+                    /*echo "<script type='text/javascript'>
+                    alert('ERROR El archivo que esta cargando debe ser PDF');
+                    window.location='vehiculoinsert.php';
+                    </script>";*/
+            }
+            $filesoat="documentos/vehiculo/soat/".' '.$info['placa'].' '.$info['nsoat'].' '.$info['fsoat'].'.pdf';
+        }
+
+        if(isset($_FILES['filetecnico']))
+        {
+            $namefile= $_FILES['filetecnico']['name'];
+            $nameTmpfile=$_FILES['filetecnico']['tmp_name'];
+            $ext=substr($namefile, strrpos($namefile,'.'));
+            if (in_array($ext,$formato))
+            {
+                if(move_uploaded_file($nameTmpfile,"documentos/vehiculo/tecnicomecanica/".' '.$info['placa'].' '.$info['nsoat'].' '.$info['fsoat'].'.pdf'))
+                {   
+                }
+            }else{
+                    /*echo "<script type='text/javascript'>
+                    alert('ERROR El archivo que esta cargando debe ser PDF');
+                    window.location='vehiculoinsert.php';
+                    </script>";*/
+            }
+
+            $filetecnico="documentos/vehiculo/tecnicomecanica/".' '.$info['placa'].' '.$info['nsoat'].' '.$info['fsoat'].'.pdf';
+        }
+
+        if(isset($_FILES['filecontractual']))
+        {
+            $namefile= $_FILES['filecontractual']['name'];
+            $nameTmpfile=$_FILES['filecontractual']['tmp_name'];
+            $ext=substr($namefile, strrpos($namefile,'.'));
+            if (in_array($ext,$formato))
+            {
+                if(move_uploaded_file($nameTmpfile,"documentos/vehiculo/polizaextracontraactual/".' '.$info['placa'].' '.$info['nsoat'].' '.$info['fsoat'].'.pdf'))
+                {   
+                }
+            }else{
+                    /*echo "<script type='text/javascript'>
+                    alert('ERROR El archivo que esta cargando debe ser PDF');
+                    window.location='vehiculoinsert.php';
+                    </script>";*/
+            }
+
+            $filecontra="documentos/vehiculo/polizaextracontraactual/".' '.$info['placa'].' '.$info['nsoat'].' '.$info['fsoat'].'.pdf';
+        }
+
+        if(isset($_FILES['filelicenciatran']))
+        {
+            $namefile= $_FILES['filelicenciatran']['name'];
+            $nameTmpfile=$_FILES['filelicenciatran']['tmp_name'];
+            $ext=substr($namefile, strrpos($namefile,'.'));
+            if (in_array($ext,$formato))
+            {
+                if(move_uploaded_file($nameTmpfile,"documentos/vehiculo/licenciatrancito/".' '.$info['placa'].' '.$info['nsoat'].' '.$info['fsoat'].'.pdf'))
+                {   
+                }
+            }else{
+                    /*echo "<script type='text/javascript'>
+                    alert('ERROR El archivo que esta cargando debe ser PDF');
+                    window.location='vehiculoinsert.php';
+                    </script>";*/
+            }
+
+            $filematric="documentos/vehiculo/licenciatrancito/".' '.$info['placa'].' '.$info['nsoat'].' '.$info['fsoat'].'.pdf';
+        }
+        $pla=$info['placa'];
+        $mar=$info['Marca'];
+        $lin=$info['linea'];
+        $mod=$info['modelo'];
+        $col=$info['color'];
+        $ser=$info['Servicio'];
+        $cla=$info['clase'];
+        $car=$info['carroceria'];
+        $carga=$info['carga'];
+        $pbruto=$info['pesobruto'];
+        $tdir=$info['direccion'];
+        $nchasis=$info['nchasis'];
+        $VIM=$info['nVIM'];
+        $act=$info['actividad'];
+        $cil=$info['cilindraje'];
+        $nmot=$info['nmotor'];
+        $comb=$info['combustible'];
+        $nejes=$info['nejes'];
+        $ltotal=$info['ltotal'];
+        $alto=$info['alto'];
+        $ancho=$info['ancho'];
+        $dejes=$info['dejes'];
+        $nllantas=$info['nllantas'];
+        $dimllantas=$info['Dllantas'];
+        $nsoat=$info['nsoat'];
+        $fsoat=$info['fsoat'];
+        $nrotecnico=$info['ntecnico'];
+        $ftecnico=$info['ftecnico'];
+        $ncontra=$info['ncontractual'];
+        $fcontra=$info['fcontractual'];
+        $nlicen=$info['nlicenciatran'];
+        $fmatri=$info['fmatricula'];
+        $queryvehi=new vehiculo;
+        $queryveh=$queryvehi->queryvehiculoplaca($pla);
+
+        if($pla=="" or($mar=="") or($lin=="") or($mod=="") or($col=="") or($ser=="") or($cla=="") or($car=="") or($carga=="") or($pbruto=="") or($tdir=="") or($nchasis=="")
+        or($VIM=="") or($act=="") or($cil=="") or($nmot=="") or($comb=="") or($nejes=="") or($ltotal=="") or($alto=="") or($ancho=="") or($dejes=="") or($nllantas=="")
+        or($dimllantas=="") or($nsoat=="") or($fsoat=="") or($filesoat=="") or($nrotecnico=="") or($ftecnico=="") or($filetecnico=="")or($ncontra=="") or($fcontra=="")
+        or($filecontra=="") or($nlicen=="") or($fmatri=="") or($filematric=="") )
+        {
+            /*echo "<script type='text/javascript'>
+            alert('Debe diligenciar todos los campos');
+            window.location='vehiculoinsert.php';
+            </script>";*/
+        }elseif(sizeof($queryveh)>0)
+        {
+            echo "<script type='text/javascript'>
+            alert('El vehiculo ya se encuentra registrado');
+            window.location='vehiculoinsert.php';
+            </script>";
+        }else
+        {
+            $sql="INSERT INTO vehiculo VALUES(NULL,:pla,:mar,:lin,:model,:col,:cil,:ser,:cla,:car,
+            :conb,:ccarg,:pesb,:nejes,:nllan,:dllan,:tdir,:ltotal,:alt,:anch,:entreeje,:nmot,:ncha,:nvim,
+            :vsoat,:psoat,:arcsoat,:ntec,:vtec,:arctec,:nlic,:fmatr,:archlic,:uvehi,:pcontra,:vcontra,:arccontra,1)";
+            $rest=$this->conex->prepare($sql);
+            $rest->execute(array('pla'=>$pla,'mar'=>$mar,'lin'=>$lin,'model'=>$mod,'col'=>$col,'cil'=>$cil,'ser'=>$ser,'cla'=>$cla,'car'=>$car,'conb'=>$comb,'ccarg'=>$carga,
+            'pesb'=>$pbruto,'nejes'=>$nejes,'nllan'=>$nllantas,'dllan'=>$dimllantas,'tdir'=>$tdir,'ltotal'=>$ltotal,'alt'=>$alto,'anch'=>$ancho,'entreeje'=>$dejes,'nmot'=>$nmot,
+            'ncha'=>$nchasis,'nvim'=>$VIM,'vsoat'=>$fsoat,'psoat'=>$nsoat,'arcsoat'=>$filesoat,'ntec'=>$nrotecnico,'vtec'=>$ftecnico,'arctec'=>$filetecnico,'nlic'=>$nlicen,
+            'fmatr'=>$fmatri,'archlic'=>$filematric,'uvehi'=>$act,'pcontra'=>$ncontra,'vcontra'=>$fcontra,'arccontra'=>$filecontra));
+
+            /*echo "<script type='text/javascript'>
+            alert('Vehiculo registrado exitosamente');
+            window.location='vehiculoinsert.php';
+            </script>";*/
+        }
+    }
     public function queryvehiculo()
     {
         $sql="CALL vehiculoquery()";
@@ -253,23 +404,36 @@ class Vehiculo extends Conexion
     }
     public function queryvehiculoplaca($pla)
     {
-        $sql="SELECT * FROM `vehiculo`
-        INNER JOIN usovheiculo
-        ON vehiculo.UsoVheiculo_IdUso=usovheiculo.IdUso
-        WHERE vehiculo.Placa=:pla";
-        $rest=$this->conex->prepare($sql);
-        $rest->execute(array('pla'=>$pla));
-        while($res=$rest->fetch(PDO::FETCH_ASSOC))
+        if($pla=="")
         {
-            $this->querveh[]=$res;
+            echo "<script type='text/javascript'>
+            alert('Ingrese el numero de la placa');
+            window.location='vehiculoquery.php';
+            </script>";
+        }else
+        {
+            $sql="SELECT * FROM `vehiculo`
+            INNER JOIN usovheiculo
+            ON vehiculo.UsoVheiculo_IdUso=usovheiculo.IdUso
+            WHERE vehiculo.Placa=:pla AND vehiculo.Estado=1";
+            $rest=$this->conex->prepare($sql);
+            $rest->execute(array('pla'=>$pla));
+            while($res=$rest->fetch(PDO::FETCH_ASSOC))
+            {
+                $this->querveh[]=$res;
+            }
+            return $this->querveh;
         }
-        return $this->querveh;
     }
-    public function insertvehiculo($info)
+    public function deletevehiculo($plac)
     {
-        print_r($info);
-        
-
+        $sql="UPDATE vehiculo SET vehiculo.Estado=0 WHERE vehiculo.Placa=:plac";
+        $rest=$this->conex->prepare($sql);
+        $rest->execute(array('plac'=>$plac));
+        echo "<script type='text/javascript'>
+                alert('Registro eliminado exitosamente');
+                window.location='../CambulosMantenimiento/vehiculoquery.php';
+                </script>";
     }
 }
 class user extends Conexion
@@ -304,6 +468,22 @@ class Rol extends Conexion
       {
         require('partials/navconductor.php');
       }
+    }
+}
+class actividad extends conexion
+{
+    private $qactividad=array();
+    private $qactivida=array();
+    public function queryactividad()
+    {
+        $sql="SELECT * FROM `usovheiculo`";
+        $rest=$this->conex->prepare($sql);
+        $rest->execute(array());
+        while($res=$rest->fetch(PDO::FETCH_ASSOC))
+        {
+            $this->qactividad[]=$res;
+        }
+        return $this->qactividad;
     }
 }
 ?>

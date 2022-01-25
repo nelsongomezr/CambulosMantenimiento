@@ -9,14 +9,32 @@ if($_SESSION==null || $_SESSION=="")
     die();
 }
 require('class/class.php');
+$rols= new Rol;
 $query=new vehiculo;
 
 
 if(isset($_POST['condoc']))
 {
     $quer=$query->queryvehiculoplaca($_POST['doc']);
-    print_r($quer);
+    if(sizeof($quer)==0)
+    {   
+        echo "<script type='text/javascript'>
+        alert('La placa no se encuentra registrada');
+        window.location='vehiculoquery.php';
+        </script>";
+    }   
+}elseif(isset($_POST['congeneral']))
+{
+    $quer=$query->queryvehiculo();
+    if(sizeof($quer)==0)
+    {   
+        echo "<script type='text/javascript'>
+        alert('No se encontraron vehiculos registrados');
+        window.location='vehiculoquery.php';
+        </script>";
+    } 
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -32,7 +50,7 @@ if(isset($_POST['condoc']))
 </head>
 <body>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
-    <?php require('partials/navadmin.php'); ?>
+<?php $ro=$rols->navrol($_SESSION['rol']); ?>
     <center>
         <br>
     <div class="container">
@@ -75,9 +93,9 @@ if(isset($_POST['condoc']))
                     <td scope="row"><?php echo $quer[$i]['Placa']?></td>
                     <td scope="row"><?php echo $quer[$i]['Marca']?></td>
                     <td scope="row"><?php echo $quer[$i]['UsoVheiculocol']?></td>     
-                    <td scope="row"><?php //echo'<a href=infoconductor.php?id='.$id=$quer[$i]['idConductor'].'>'; ?>ver mas</a></td>
-                    <td scope="row"><?php //echo'<a href=conductorupdate.php?id='.$id=$quer[$i]['idConductor'].'>'; ?><img src="img/editar usuario.png" alt="Editar usuario" width="30"></a></td>
-                    <td scope="row"><?php //echo'<a href=conductordelete.php?id='.$id=$quer[$i]['idConductor'].'>'; ?><img src="img/eliminar usuario.png" alt="Eliminar usuario" width="30"></a></td>
+                    <td scope="row"><?php echo'<a href=vehiculoinfo.php?id='.$id=$quer[$i]['Placa'].'>'; ?>ver mas</a></td>
+                    <td scope="row"><?php echo'<a href=vehiculoupdate.php?id='.$id=$quer[$i]['Placa'].'>'; ?><img src="img/editar usuario.png" alt="Editar usuario" width="30"></a></td>
+                    <td scope="row"><?php echo'<a href=vehiculodelete.php?id='.$id=$quer[$i]['Placa'].'>'; ?><img src="img/eliminar usuario.png" alt="Eliminar usuario" width="30"></a></td>
                 </tr>
                 <?php
                 }

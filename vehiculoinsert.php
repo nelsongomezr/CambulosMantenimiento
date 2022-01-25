@@ -2,6 +2,9 @@
 session_start();
 require('class/class.php');
 $nav= new rol;
+$act=new actividad;
+$vehi=new vehiculo;
+$acti=$act->queryactividad();
 ?>
 
 <!doctype html>
@@ -89,8 +92,17 @@ $nav= new rol;
             </label>
             <label class="form-label">
                 <b>Actividad del vehiculo</b><br>
+
                 <select name="actividad" class="form-select">
-                    <option value="">Seleccione la actividad</option>
+                    <option>Seleccione la actividad</option>
+                    <?php
+                    for($i=0;$i<sizeof($acti);$i++)
+                    {
+                    ?>
+                    <option value="<?php echo $acti[$i]['IdUso'] ?>"><?php echo $acti[$i]['UsoVheiculocol'] ?></option>
+                    <?php
+                    }
+                    ?>
                 </select>
             </label>
 
@@ -211,7 +223,7 @@ $nav= new rol;
     <div id="flush-collapseSix" class="accordion-collapse collapse" aria-labelledby="flush-headingSix" data-bs-parent="#accordionFlushExample">
         <div class="accordion-body">
             <label class="form-label">
-                <b>Numero poliza </b><br>
+                <b>Numero revision </b><br>
                 <input type="text" name="ntecnico" class="form-control">
             </label>
             <label class="form-label">
@@ -229,7 +241,7 @@ $nav= new rol;
     <div class="accordion-item bg-secondary bg-opacity-10">
         <h2 class="accordion-header" id="flush-headingSeven">
         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseSeven" aria-expanded="false" aria-controls="flush-collapseSeven">
-            <b>Poliza contractual</b>
+            <b>Poliza extracontractual</b>
         </button>
         </h2>
         <div id="flush-collapseSeven" class="accordion-collapse collapse" aria-labelledby="flush-headingSeven" data-bs-parent="#accordionFlushExample">
@@ -289,4 +301,9 @@ $nav= new rol;
   </body>
 </html>
 <?php
+
+    if(isset($_POST['registrar']))
+    {
+        $veh=$vehi->insertvehiculo($_POST);
+    }
 ?>
