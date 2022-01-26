@@ -6,7 +6,7 @@ $nav= new rol;
 $act=new actividad;
 $vehi=new vehiculo;
 $acti=$act->queryactividad();
-$veh=$vehi->queryvehiculoplaca($pla);
+$veh=$vehi->queryvehiculoplacaupdate($pla);
 ?>
 
 <!doctype html>
@@ -15,12 +15,12 @@ $veh=$vehi->queryvehiculoplaca($pla);
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-    <title>Registro vehiculos</title>
+    <title>Actualizacion informacion vehiculos</title>
   </head>
   <body class="">
     <?php $na=$nav->navrol($_SESSION['rol']) ?>
     <br>
-    <center><h1>REGISTRO VEHICULOS</h1></center>
+    <center><h1>ACTUALIZACION INFORMACION VEHICULOS</h1></center>
     <div class="accordion accordion-flush container" id="accordionFlushExample">
     <form method="POST" enctype="multipart/form-data">
   <div class="accordion-item bg-secondary bg-opacity-10">
@@ -95,8 +95,8 @@ $veh=$vehi->queryvehiculoplaca($pla);
             <label class="form-label">
                 <b>Actividad del vehiculo</b><br>
 
-                <select name="actividad" class="form-select" value="<?php echo $veh[0]['UsoVheiculocol'];?>">
-                    <option>Seleccione la actividad</option>
+                <select name="actividad" class="form-select" >
+                    <option value="<?php echo $veh[0]['IdUso'];?>"><?php echo $veh[0]['UsoVheiculocol'].' Actividad actual';?></option>
                     <?php
                     for($i=0;$i<sizeof($acti);$i++)
                     {
@@ -274,7 +274,7 @@ $veh=$vehi->queryvehiculoplaca($pla);
             <div class="accordion-body">
                 <label class="form-label">
                     <b>Numero licencia trancito </b><br>
-                    <input type="number" name="nlicenciatran" class="form-control" value="<?php echo $veh[0]['NoLicencia trancito'];?>">
+                    <input type="number" name="nlicenciatran" class="form-control" value="<?php echo $veh[0]['NoLicenciatrancito'];?>">
                 </label>
                 <label class="form-label">
                     <b>Fecha matricula</b><br>
@@ -288,7 +288,7 @@ $veh=$vehi->queryvehiculoplaca($pla);
         </div>
     </div>
     <br>
-        <input type="submit" name="registrar" value="REGISTRAR" class="btn btn-dark w-50">
+        <input type="submit" name="update" value="ACTUALIZAR" class="btn btn-dark w-50">
 
     </form>
 </div>
@@ -304,8 +304,9 @@ $veh=$vehi->queryvehiculoplaca($pla);
 </html>
 <?php
 
-    if(isset($_POST['registrar']))
+    if(isset($_POST['update']))
     {
-        
+        $veh=$vehi->updatevehiculo($_POST);
+
     }
 ?>

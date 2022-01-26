@@ -263,7 +263,7 @@ $vehi=$query->queryvehiculoplaca($_GET['id']);
             <div class="accordion-body">
                 <label class="form-label">
                     <b>Numero licencia trancito </b><br>
-                    <input type="number" name="nlicenciatran" class="form-control" value="<?php echo $vehi[0]['NoLicencia trancito'];?>" disabled>
+                    <input type="number" name="nlicenciatran" class="form-control" value="<?php echo $vehi[0]['NoLicenciatrancito'];?>" disabled>
                 </label>
                 <label class="form-label">
                     <b>Fecha matricula</b><br>

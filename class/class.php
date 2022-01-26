@@ -242,8 +242,7 @@ class Vehiculo extends Conexion
 
     public function insertvehiculo($info)
     {
-        print_r($info).'<br>';
-        print_r($_FILES);
+
         $formato[]=('.pdf');
 
         if(isset($_FILES['filesoat']))
@@ -257,10 +256,10 @@ class Vehiculo extends Conexion
                 {   
                 }
             }else{
-                    /*echo "<script type='text/javascript'>
+                    echo "<script type='text/javascript'>
                     alert('ERROR El archivo que esta cargando debe ser PDF');
                     window.location='vehiculoinsert.php';
-                    </script>";*/
+                    </script>";
             }
             $filesoat="documentos/vehiculo/soat/".' '.$info['placa'].' '.$info['nsoat'].' '.$info['fsoat'].'.pdf';
         }
@@ -276,10 +275,10 @@ class Vehiculo extends Conexion
                 {   
                 }
             }else{
-                    /*echo "<script type='text/javascript'>
+                    echo "<script type='text/javascript'>
                     alert('ERROR El archivo que esta cargando debe ser PDF');
                     window.location='vehiculoinsert.php';
-                    </script>";*/
+                    </script>";
             }
 
             $filetecnico="documentos/vehiculo/tecnicomecanica/".' '.$info['placa'].' '.$info['nsoat'].' '.$info['fsoat'].'.pdf';
@@ -296,10 +295,10 @@ class Vehiculo extends Conexion
                 {   
                 }
             }else{
-                    /*echo "<script type='text/javascript'>
+                    echo "<script type='text/javascript'>
                     alert('ERROR El archivo que esta cargando debe ser PDF');
                     window.location='vehiculoinsert.php';
-                    </script>";*/
+                    </script>";
             }
 
             $filecontra="documentos/vehiculo/polizaextracontraactual/".' '.$info['placa'].' '.$info['nsoat'].' '.$info['fsoat'].'.pdf';
@@ -316,10 +315,10 @@ class Vehiculo extends Conexion
                 {   
                 }
             }else{
-                    /*echo "<script type='text/javascript'>
+                    echo "<script type='text/javascript'>
                     alert('ERROR El archivo que esta cargando debe ser PDF');
                     window.location='vehiculoinsert.php';
-                    </script>";*/
+                    </script>";
             }
 
             $filematric="documentos/vehiculo/licenciatrancito/".' '.$info['placa'].' '.$info['nsoat'].' '.$info['fsoat'].'.pdf';
@@ -364,10 +363,10 @@ class Vehiculo extends Conexion
         or($dimllantas=="") or($nsoat=="") or($fsoat=="") or($filesoat=="") or($nrotecnico=="") or($ftecnico=="") or($filetecnico=="")or($ncontra=="") or($fcontra=="")
         or($filecontra=="") or($nlicen=="") or($fmatri=="") or($filematric=="") )
         {
-            /*echo "<script type='text/javascript'>
+            echo "<script type='text/javascript'>
             alert('Debe diligenciar todos los campos');
             window.location='vehiculoinsert.php';
-            </script>";*/
+            </script>";
         }elseif(sizeof($queryveh)>0)
         {
             echo "<script type='text/javascript'>
@@ -385,10 +384,10 @@ class Vehiculo extends Conexion
             'ncha'=>$nchasis,'nvim'=>$VIM,'vsoat'=>$fsoat,'psoat'=>$nsoat,'arcsoat'=>$filesoat,'ntec'=>$nrotecnico,'vtec'=>$ftecnico,'arctec'=>$filetecnico,'nlic'=>$nlicen,
             'fmatr'=>$fmatri,'archlic'=>$filematric,'uvehi'=>$act,'pcontra'=>$ncontra,'vcontra'=>$fcontra,'arccontra'=>$filecontra));
 
-            /*echo "<script type='text/javascript'>
+            echo "<script type='text/javascript'>
             alert('Vehiculo registrado exitosamente');
             window.location='vehiculoinsert.php';
-            </script>";*/
+            </script>";
         }
     }
     public function queryvehiculo()
@@ -425,6 +424,20 @@ class Vehiculo extends Conexion
             return $this->querveh;
         }
     }
+    public function queryvehiculoplacaupdate($pla)
+    {
+            $sql="SELECT * FROM `vehiculo`
+            INNER JOIN usovheiculo
+            ON vehiculo.UsoVheiculo_IdUso=usovheiculo.IdUso
+            WHERE vehiculo.Placa=:pla AND vehiculo.Estado=1";
+            $rest=$this->conex->prepare($sql);
+            $rest->execute(array('pla'=>$pla));
+            while($res=$rest->fetch(PDO::FETCH_ASSOC))
+            {
+                $this->querveh[]=$res;
+            }
+            return $this->querveh;
+    }
     public function deletevehiculo($plac)
     {
         $sql="UPDATE vehiculo SET vehiculo.Estado=0 WHERE vehiculo.Placa=:plac";
@@ -434,6 +447,159 @@ class Vehiculo extends Conexion
                 alert('Registro eliminado exitosamente');
                 window.location='../CambulosMantenimiento/vehiculoquery.php';
                 </script>";
+    }
+    public function updatevehiculo ($update)
+    {
+    
+        $formato[]=('.pdf');
+
+        if(isset($_FILES['filesoat']))
+        {
+            $namefile= $_FILES['filesoat']['name'];
+            $nameTmpfile=$_FILES['filesoat']['tmp_name'];
+            $ext=substr($namefile, strrpos($namefile,'.'));
+            if (in_array($ext,$formato))
+            {
+                if(move_uploaded_file($nameTmpfile,"documentos/vehiculo/soat/".' '.$update['placa'].' '.$update['nsoat'].' '.$update['fsoat'].'.pdf'))
+                {   
+                }
+            }else{
+                    /*echo "<script type='text/javascript'>
+                    alert('ERROR El archivo que esta cargando debe ser PDF');
+                    window.location='vehiculoupdate.php';
+                    </script>";*/
+            }
+            $filesoat="documentos/vehiculo/soat/".' '.$update['placa'].' '.$update['nsoat'].' '.$update['fsoat'].'.pdf';
+        }
+
+        if(isset($_FILES['filetecnico']))
+        {
+            $namefile= $_FILES['filetecnico']['name'];
+            $nameTmpfile=$_FILES['filetecnico']['tmp_name'];
+            $ext=substr($namefile, strrpos($namefile,'.'));
+            if (in_array($ext,$formato))
+            {
+                if(move_uploaded_file($nameTmpfile,"documentos/vehiculo/tecnicomecanica/".' '.$update['placa'].' '.$update['nsoat'].' '.$update['fsoat'].'.pdf'))
+                {   
+                }
+            }else{
+                    /*echo "<script type='text/javascript'>
+                    alert('ERROR El archivo que esta cargando debe ser PDF');
+                    window.location='vehiculoupdate.php';
+                    </script>";*/
+            }
+
+            $filetecnico="documentos/vehiculo/tecnicomecanica/".' '.$update['placa'].' '.$update['nsoat'].' '.$update['fsoat'].'.pdf';
+        }
+
+        if(isset($_FILES['filecontractual']))
+        {
+            $namefile= $_FILES['filecontractual']['name'];
+            $nameTmpfile=$_FILES['filecontractual']['tmp_name'];
+            $ext=substr($namefile, strrpos($namefile,'.'));
+            if (in_array($ext,$formato))
+            {
+                if(move_uploaded_file($nameTmpfile,"documentos/vehiculo/polizaextracontraactual/".' '.$update['placa'].' '.$update['nsoat'].' '.$update['fsoat'].'.pdf'))
+                {   
+                }
+            }else{
+                    /*echo "<script type='text/javascript'>
+                    alert('ERROR El archivo que esta cargando debe ser PDF');
+                    window.location='vehiculoupdate.php';
+                    </script>";*/
+            }
+
+            $filecontra="documentos/vehiculo/polizaextracontraactual/".' '.$update['placa'].' '.$update['nsoat'].' '.$update['fsoat'].'.pdf';
+        }
+
+        if(isset($_FILES['filelicenciatran']))
+        {
+            $namefile= $_FILES['filelicenciatran']['name'];
+            $nameTmpfile=$_FILES['filelicenciatran']['tmp_name'];
+            $ext=substr($namefile, strrpos($namefile,'.'));
+            if (in_array($ext,$formato))
+            {
+                if(move_uploaded_file($nameTmpfile,"documentos/vehiculo/licenciatrancito/".' '.$update['placa'].' '.$update['nsoat'].' '.$update['fsoat'].'.pdf'))
+                {   
+                }
+            }else{
+                    /*echo "<script type='text/javascript'>
+                    alert('ERROR El archivo que esta cargando debe ser PDF');
+                    window.location='vehiculoupdate.php';
+                    </script>";*/
+            }
+
+            $filematric="documentos/vehiculo/licenciatrancito/".' '.$update['placa'].' '.$update['nsoat'].' '.$update['fsoat'].'.pdf';
+        }
+        $pla=$update['placa'];
+        $mar=$update['Marca'];
+        $lin=$update['linea'];
+        $mod=$update['modelo'];
+        $col=$update['color'];
+        $ser=$update['Servicio'];
+        $cla=$update['clase'];
+        $car=$update['carroceria'];
+        $carga=$update['carga'];
+        $pbruto=$update['pesobruto'];
+        $tdir=$update['direccion'];
+        $nchasis=$update['nchasis'];
+        $VIM=$update['nVIM'];
+        $act=$update['actividad'];
+        $cil=$update['cilindraje'];
+        $nmot=$update['nmotor'];
+        $comb=$update['combustible'];
+        $nejes=$update['nejes'];
+        $ltotal=$update['ltotal'];
+        $alto=$update['alto'];
+        $ancho=$update['ancho'];
+        $dejes=$update['dejes'];
+        $nllantas=$update['nllantas'];
+        $dimllantas=$update['Dllantas'];
+        $nsoat=$update['nsoat'];
+        $fsoat=$update['fsoat'];
+        $nrotecnico=$update['ntecnico'];
+        $ftecnico=$update['ftecnico'];
+        $ncontra=$update['ncontractual'];
+        $fcontra=$update['fcontractual'];
+        $nlicen=$update['nlicenciatran'];
+        $fmatri=$update['fmatricula'];
+
+        if($pla=="" or($mar=="") or($lin=="") or($mod=="") or($col=="") or($ser=="") or($cla=="") or($car=="") or($carga=="") or($pbruto=="") or($tdir=="") or($nchasis=="")
+        or($VIM=="") or($act=="") or($cil=="") or($nmot=="") or($comb=="") or($nejes=="") or($ltotal=="") or($alto=="") or($ancho=="") or($dejes=="") or($nllantas=="")
+        or($dimllantas=="") or($nsoat=="") or($fsoat=="") or($filesoat=="") or($nrotecnico=="") or($ftecnico=="") or($filetecnico=="")or($ncontra=="") or($fcontra=="")
+        or($filecontra=="") or($nlicen=="") or($fmatri=="") or($filematric=="") )
+        {
+            echo "<script type='text/javascript'>
+            alert('Debe diligenciar todos los campos');
+            window.location='vehiculoquery.php';
+            </script>";
+        }else
+        {
+            $sql="UPDATE vehiculo SET vehiculo.Placa=:pla,
+            vehiculo.Marca=:mar,vehiculo.Linea=:lin,vehiculo.modelo=:model,vehiculo.Color=:col,vehiculo.Cilindraje=:cil,
+            vehiculo.Servicio=:ser,vehiculo.ClaseVehiculo=:cla,vehiculo.TipoCarroceria=:car,vehiculo.Combustible=:conb,
+            vehiculo.CapacidadCarga=:ccarg,vehiculo.PesoBruto=:pesb,vehiculo.NoEjes=:nejes,vehiculo.NoLlantas=:nllan,
+            vehiculo.DimensionLLanta=:dllan,vehiculo.TipoDireccion=:tdir,vehiculo.LongitudTotal=:ltotal,
+            vehiculo.Alto=:alt,vehiculo.Ancho=:anch,vehiculo.DistaEntreEjes=:entreeje,vehiculo.NumeroMotor=:nmot,
+            vehiculo.NoChasis=:ncha,vehiculo.NoVim=:nvim,vehiculo.VenceSoat=:vsoat,vehiculo.PolizaSoat=:psoat,
+            vehiculo.ArchSoat=:arcsoat,vehiculo.NoTecnicomecanica=:ntec,vehiculo.VenceTecnicomecanica=:vtec,
+            vehiculo.ArchiTecnicomecanica=:arctec,vehiculo.NoLicenciatrancito=:nlic,vehiculo.FechaMatricula=:fmatr,
+            vehiculo.ArchiLicenciaTrancito=:archlic,vehiculo.UsoVheiculo_IdUso=:uvehi,vehiculo.polizacontraactual=:pcontra,
+            vehiculo.VencePolizaContraactual=:vcontra,vehiculo.archPolizaContraActual=:arccontra,vehiculo.Estado=1
+           WHERE vehiculo.Placa=:pla";
+
+            $rest=$this->conex->prepare($sql);
+            $rest->execute(array('pla'=>$pla,'mar'=>$mar,'lin'=>$lin,'model'=>$mod,'col'=>$col,'cil'=>$cil,'ser'=>$ser,'cla'=>$cla,'car'=>$car,'conb'=>$comb,'ccarg'=>$carga,
+            'pesb'=>$pbruto,'nejes'=>$nejes,'nllan'=>$nllantas,'dllan'=>$dimllantas,'tdir'=>$tdir,'ltotal'=>$ltotal,'alt'=>$alto,'anch'=>$ancho,'entreeje'=>$dejes,'nmot'=>$nmot,
+            'ncha'=>$nchasis,'nvim'=>$VIM,'vsoat'=>$fsoat,'psoat'=>$nsoat,'arcsoat'=>$filesoat,'ntec'=>$nrotecnico,'vtec'=>$ftecnico,'arctec'=>$filetecnico,'nlic'=>$nlicen,
+            'fmatr'=>$fmatri,'archlic'=>$filematric,'uvehi'=>$act,'pcontra'=>$ncontra,'vcontra'=>$fcontra,'arccontra'=>$filecontra));
+
+            /*echo "<script type='text/javascript'>
+            alert('Informacion del vehiculo a sido actualizada exitosamente');
+            window.location='vehiculoquery.php';
+            </script>";*/
+        
+        }
     }
 }
 class user extends Conexion
