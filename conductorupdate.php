@@ -14,6 +14,7 @@ $queryv=new vehiculo;
 $id=$_GET['id'];
 $quer= $query->queryconductor($id);
 $queryv=$queryv->queryvehiculo();
+$nav= new rol;
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -28,93 +29,110 @@ $queryv=$queryv->queryvehiculo();
 </head>
 <body>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
-    <?php require('partials/navadmin.php'); ?>
+    <?php $na=$nav->navrol($_SESSION['rol']) ?>
     <br>
-    
-    <div class="container-sm">
-    <center>
-        <div class="card-footer text-muted bg-dark">
-            <div class="card-header">
-                <h1>ACTUALIZACION DATOS CONDUCTOR</h1>
+    <center><h1>ACTUALIZACION DATOS CONDUCTOR</h1></center>
+    <div class="accordion accordion-flush container" id="accordionFlushExample">
+        <form method="POST" enctype="multipart/form-data">
+        <div class="accordion-item bg-secondary bg-opacity-10">
+            <h2 class="accordion-header" id="flush-headingOne">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                <b>Informacion general</b>
+                </button>
+            </h2>
+        <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+            <div class="accordion-body">
+                <label class="form-label">
+                    <b>Documento de Identidad</b><br>
+                    <input type="number" name="id"  class="form-control" value="<?php echo $quer[0]['idConductor'];?>">
+                </label>
+                <label class="form-label"><b>Nombres</b><br>
+                    <input type="text" name="nom"  class="form-control" value="<?php echo $quer[0]['Nombre'];?>">
+                    
+                </label>
+                <label class="form-label"><b>Apellidos</b><br>
+                        <input type="text" name="ap" class="form-control" value="<?php echo $quer[0]['Apellido'];?>">
+                </label>
+                <label class="form-label"><b>Telefono</b><br>
+                        <input type="tel" name="tel" class="form-control" value="<?php echo $quer[0]['TelelfonoConductor'];?>">
+                </label>
             </div>
-        </div>
-        <div class="card-footer text-muted bg-dark">
-            <form method="POST" enctype="multipart/form-data" class="">
-            <div class="mb-3">
-                <label class="form-label">Documento de Identidad</label>
-                <input type="text" name="id" value="<?php echo $quer[0]['idConductor'];?>" class="form-control w-50">
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label">Nombre</label>
-                <input type="text" name="nom" value="<?php echo $quer[0]['Nombre'];?>" class="form-control w-50">
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label">Apellidos</label>
-                <input type="text" name="ap" value="<?php echo $quer[0]['Apellido'];?>" class="form-control w-50">
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label">Telefono</label>
-                <input type="text" name="tel" value="<?php echo $quer[0]['TelelfonoConductor'];?>" class="form-control w-50">
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label">Categoria licencia</label>
-                <input type="text" name="catlicen" value="<?php echo $quer[0]['CategoLicencia'];?>" class="form-control w-50">
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label">Fecha vencimiento licencia</label>
-                <input type="date" name="venlicen" value="<?php echo $quer[0]['VenceLicencia'];?>" class="form-control w-50">
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label">Fecha inscripcion RUNT</label>
-                <input type="date" name="frunt" value="<?php echo $quer[0]['InscripRUNT'];?>" class="form-control w-50">
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label">Edad</label>
-                <input type="number" name="edad" value="<?php echo $quer[0]['Edad'];?>"  class="form-control w-50">
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label">Tipo de contrato</label>
-                <input type="text" name="tcon" value="<?php echo $quer[0]['TipoContrato'];?>" class="form-control w-50">
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label">Años experiencia</label>
-                <input type="text" name="expe" value="<?php echo $quer[0]['ExpConduccion'];?>" class="form-control w-50">
-            </div>
-            <input type="hidden" name="rol" value="<?php echo $quer[0]['Rol_idRol']; ?>">
-
-            <div class="mb-3">
-                <label class="form-label">Asignar vehiculo</label>
-                <select name="idveh" class="form-select w-50">
-                            <option>Seleccionar vehiculo</option>
-                            <?php 
+            <div class="accordion-body">
+                <label class="form-label"><b>Fecha nacimiento</b><br>
+                    <input type="date" name="edad" class="form-control" value="<?php echo $quer[0]['Edad'];?>">
+                </label>
+                <label class="form-label"><b>Tipo de contrato:</b><br>
+                    <input type="text" name="tcon" class="form-control" value="<?php echo $quer[0]['TipoContrato'];?>" >
+                </label>
+                <label class="form-label"><b>Años experiencia</b><br>
+                    <input type="text" name="expe" class="form-control" value="<?php echo $quer[0]['ExpConduccion'];?>">
+                </label>
+                <label class="form-label"><b>Asignar vehiculo</b>
+                    <select name="idveh" class="form-select">
+                        <option value="<?php echo $quer[0]['idVehiculo']?>"><?php echo $quer[0]['Placa']?> Vehiculo actual</option>
+                        <?php
                             for($i=0;$i<sizeof($queryv);$i++){
-                             ?>
-                             <option value="<?php echo $queryv[$i]['idVehiculo'];?>"><?php echo $queryv[$i]['Placa'];?></option>
-                             <?php 
-                             }
-                             ?>
-                </select>  
+                        ?>
+                        <option value="<?php echo $queryv[$i]['idVehiculo'];?>"><?php echo $queryv[$i]['Placa'];?></option>
+                        <?php
+                        }
+                        ?>
+                    </select>
+                </label>
             </div>
-
-            <div class="mb-3">
-                <label class="form-label">Cargue PDF de la licencia</label>
-                <input type="file" name="cargue" class="form-control w-50">
-            </div>
-            <input type="submit" name="update" value="ACTUALIZAR" class="btn btn-dark w-50">
-            </form>
         </div>
-        </center>
+        </div>
+        <div class="accordion-item bg-secondary bg-opacity-10">
+            <h2 class="accordion-header" id="flush-headingTwo">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
+                <b>Informacion licencia</b>
+                </button>
+            </h2>
+            <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample">
+                <div class="accordion-body">
+                    <label class="form-label"><b>Categoria Licencia</b><br>
+                        <input type="text" name="catlicen" class="form-control" value="<?php echo $quer[0]['CategoLicencia'];?>">
+                    </label> 
+                    <label class="form-label"><b>Fecha vencimiento licencia</b>
+                        <input type="date" name="venlicen" class="form-control" value="<?php echo $quer[0]['VenceLicencia'];?>" class="form-control w-50">
+                    </label>
+                    <label class="form-label"><b>Fecha inscripcion RUNT</b>
+                        <input type="date" name="frunt" class="form-control" value="<?php echo $quer[0]['InscripRUNT'];?>">
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="accordion-item bg-secondary bg-opacity-10">
+            <h2 class="accordion-header" id="flush-headingThree">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
+                <b>Documentos</b>
+                </button>
+            </h2>
+            <div id="flush-collapseThree" class="accordion-collapse collapse" aria-labelledby="flush-headingThree" data-bs-parent="#accordionFlushExample">
+                <div class="accordion-body">
+                    <label class="form-label"><b>Licencia conduccion</b>
+                        <input type="file" name="cargue" class="form-control" id="formFile" value="<?php echo $quer[0]['archlicencia']; ?>">
+                    </label>
+                    <label class="form-label"><b>Formato autorizacion de descuento</b>
+                        <input type="file" name="fileautdescuento" class="form-control" id="formFile" value="<?php echo $quer[0]['ArchAutoDescuento']; ?>">
+                    </label>
+                    <label class="form-label"><b>Formato apertura caja menor</b>
+                        <input type="file" name="filecajamenor" class="form-control" id="formFile" value="<?php echo $quer[0]['ArchAperturaCaja']; ?>">
+                    </label>
+                    <label class="form-label"><b>Formato responsivo equipo movil</b>
+                        <input type="file" name="fileequipomovil" class="form-control" id="formFile" value="<?php echo $quer[0]['ArchEquipoMovil']; ?>">
+                    </label>
+                </div>
+            </div>
+        </div>
+        <BR>
+        <input type="hidden" name="rol" value="<?php echo $quer[0]['Rol_idRol']; ?>">
+        <input type="submit" name="update" value="ACTUALIZAR" class="btn btn-dark w-50">
+        
+        </form>
+        <br>
     </div>
-    <br>
     <?php
         require('partials/footer.php');
     ?>

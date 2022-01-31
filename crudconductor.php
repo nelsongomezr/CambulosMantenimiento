@@ -11,6 +11,7 @@ if($_SESSION==null || $_SESSION=="")
 require("class/class.php");
 $cond= new conductor;
 $vehi= new Vehiculo;
+$nav=new rol;
 $veh=$vehi->queryvehiculo();
 ?>
 <!DOCTYPE html>
@@ -26,7 +27,7 @@ $veh=$vehi->queryvehiculo();
 </head>
 <body>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
-    <?php require('partials/navadmin.php'); ?>
+    <?php $na=$nav->navrol($_SESSION['rol']) ?>
     
     <br>
     <center><h1>REGISTRO CONDUCTORES</h1></center> <BR>
@@ -41,30 +42,30 @@ $veh=$vehi->queryvehiculo();
         <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
             <div class="accordion-body">
                 <label class="form-label">
-                    <b>Documento de Identidad:</b><br>
+                    <b>Documento de Identidad</b><br>
                     <input type="number" name="idcond" placeholder="Documento identificacion" class="form-control">
                 </label>
-                <label class="form-label"><b>Nombres:</b><br>
+                <label class="form-label"><b>Nombres</b><br>
                     <input type="text" name="nom" placeholder="Ingrese los nombres" class="form-control">
                 </label>
-                <label class="form-label"><b>Apellidos:</b><br>
+                <label class="form-label"><b>Apellidos</b><br>
                         <input type="text" name="ape" placeholder="Ingrese los apellidos" class="form-control">
                 </label>
-                <label class="form-label"><b>Telefono:</b><br>
+                <label class="form-label"><b>Telefono</b><br>
                         <input type="tel" name="tel" placeholder="ingrese el telefono" class="form-control">
                 </label>
             </div>
             <div class="accordion-body">
-                <label class="form-label"><b>Edad:</b><br>
-                    <input type="number" name="edad" placeholder="Ingrese la edad" class="form-control">
+                <label class="form-label"><b>Fecha nacimiento</b><br>
+                    <input type="date" name="edad" placeholder="Ingrese la edad" class="form-control">
                 </label>
                 <label class="form-label"><b>Tipo de contrato:</b><br>
                     <input type="text" name="tcon" class="form-control" placeholder="Ingrese el tipo de contrato">
                 </label>
-                <label class="form-label"><b>Años experiencia:</b><br>
+                <label class="form-label"><b>Años experiencia</b><br>
                     <input type="text" name="expe" class="form-control" placeholder="Ingrese años de experiencia">
                 </label>
-                <label class="form-label"><b>Asignar vehiculo:</b>
+                <label class="form-label"><b>Asignar vehiculo</b>
                     <select name="vehiculo" class="form-select">
                         <option>Seleccione el vehiculo</option>
                         <?php
@@ -88,13 +89,13 @@ $veh=$vehi->queryvehiculo();
             </h2>
             <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample">
                 <div class="accordion-body">
-                    <label class="form-label"><b>Categoria Licencia:</b><br>
+                    <label class="form-label"><b>Categoria Licencia</b><br>
                         <input type="text" name="categolicencia" placeholder="Ingrese la categoria" class="form-control">
                     </label> 
-                    <label class="form-label"><b>Fecha vencimiento licencia:</b>
+                    <label class="form-label"><b>Fecha vencimiento licencia</b>
                         <input type="date" name="vencelicencia" class="form-control">
                     </label>
-                    <label class="form-label"><b>Fecha inscripcion RUNT:</b>
+                    <label class="form-label"><b>Fecha inscripcion RUNT</b>
                         <input type="date" name="frunt" class="form-control">
                     </label>
                 </div>
@@ -112,14 +113,14 @@ $veh=$vehi->queryvehiculo();
                     <label class="form-label"><b>Licencia conduccion</b>
                         <input type="file" name="filelicencia" class="form-control" id="formFile">
                     </label>
-                    <label class="form-label"><b>Formato autorizacion de descuento:</b>
-                        <input type="file" name="filelicencia" class="form-control" id="formFile">
+                    <label class="form-label"><b>Formato autorizacion de descuento</b>
+                        <input type="file" name="fileautdescuento" class="form-control" id="formFile">
                     </label>
                     <label class="form-label"><b>Formato apertura caja menor</b>
-                        <input type="file" name="filelicencia" class="form-control" id="formFile">
+                        <input type="file" name="filecajamenor" class="form-control" id="formFile">
                     </label>
                     <label class="form-label"><b>Formato responsivo equipo movil</b>
-                        <input type="file" name="filelicencia" class="form-control" id="formFile">
+                        <input type="file" name="fileequipomovil" class="form-control" id="formFile">
                     </label>
                 </div>
             </div>
