@@ -16,10 +16,11 @@ $querycond= new  conductor;
 if(!$_GET==0 or($_GET==""))
 {
   $Quercond=$querycond->queryconductor($_GET['id']);
-
+  $id=$Quercond[0]['idConductor'];
 }else
 {
   $Quercond=$querycond->queryconductor($_SESSION['varid']);
+  $id=$Quercond[0]['idConductor'];
   
 }
 
@@ -118,7 +119,6 @@ $edad= $querycond->old($Quercond[0]['Edad']);
                 </label>
             </button>
         </label>
-
                 </div>
             </div>
         </div>
@@ -151,10 +151,8 @@ $edad= $querycond->old($Quercond[0]['Edad']);
             <div id="flush-collapseFour" class="accordion-collapse collapse" aria-labelledby="flush-headingFour" data-bs-parent="#accordionFlushExample">
 
               <button type="button" class="btn btn-light">
-                <a href="#"><b>Historico comparendos</b><br></a>
-              </button>
-              <button type="button" class="btn btn-light">
-                <a href="#"><b>Deudas comparendos</b></a>
+              <?php echo'<a href=reportecomparendos.php?id='.$id; ?><b>Reporte comparendos</b><br></a>
+              
               </button>
               <button type="button" class="btn btn-light">
                 <a href="#"><b>Reporte incidentes</b></a>

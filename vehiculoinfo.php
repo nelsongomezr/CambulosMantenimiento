@@ -3,7 +3,8 @@ session_start();
 require("class/class.php");
 $rols= new Rol;
 $query=new vehiculo;
-$vehi=$query->queryvehiculoplaca($_GET['id']);
+$vehi=$query->queryvehiculoplaca($_GET['id']); 
+$id=$vehi[0]['idVehiculo'];
 ?>
 
 <!doctype html>
@@ -287,7 +288,7 @@ $vehi=$query->queryvehiculoplaca($_GET['id']);
             <div class="accordion-body">
 
                 <button type="button" class="btn btn-light">
-                    <a href="#"><b>Reporte comparendos</b></a>
+                <?php echo'<a href=reportecomparendos.php?id='.$id.'>' ?><b>Reporte comparendos</b></a>
                 </button>
                 <button type="button" class="btn btn-light">
                     <a href="#"><b>Reporte de incidentes</b></a>

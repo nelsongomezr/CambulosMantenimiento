@@ -218,7 +218,7 @@ class conductor extends Conexion
                 </script>";
             }
     }
-    public function updateconductor($update)
+    public function updateconductor($updatec)
     {
         $formato[]=('.pdf');
 
@@ -229,16 +229,17 @@ class conductor extends Conexion
             $ext=substr($namefile, strrpos($namefile,'.'));
             if (in_array($ext,$formato))
             {
-                if(move_uploaded_file($nameTmpfile,"documentos/licencia/".' '.$update[0]['id'].' '.$update[0]['nom'].' '.$update[0]['ap'].'.pdf'))
+                if(move_uploaded_file($nameTmpfile,"documentos/licencia/".' '.$updatec['id'].' '.$updatec['nom'].' '.$updatec['ap'].'.pdf'))
                 {   
                 }
             }else
             {
                 /*echo "<script type='text/javascript'>
                     alert('ERROR El archivo de licencia de conduccion que esta cargando debe ser PDF');
-                    window.location='../CambulosMantenimiento/crudconductor.php';*/
+                    window.location='../CambulosMantenimiento/crudconductor.php';
+                    </script>";*/
             }
-            $ruta="documentos/licencia/".' '.$update[0]['id'].' '.$update[0]['nom'].' '.$update[0]['ap'].'.pdf';   
+            $ruta="documentos/licencia/".' '.$updatec['id'].' '.$updatec['nom'].' '.$updatec['ap'].'.pdf';   
         }
 
         if(isset($_FILES['fileautdescuento']))
@@ -248,7 +249,7 @@ class conductor extends Conexion
             $ext=substr($namefile, strrpos($namefile,'.'));
             if (in_array($ext,$formato))
             {
-                if(move_uploaded_file($nameTmpfile,"documentos/conductor/FormatoAutorizacionDescuento/".' '.$update[0]['id'].' '.$update[0]['nom'].' '.$update[0]['ap'].'.pdf'))
+                if(move_uploaded_file($nameTmpfile,"documentos/conductor/FormatoAutorizacionDescuento/".' '.$updatec['id'].' '.$updatec['nom'].' '.$updatec['ap'].'.pdf'))
                 {   
                 }
             }else{
@@ -257,7 +258,7 @@ class conductor extends Conexion
                     window.location='../CambulosMantenimiento/crudconductor.php';
                     </script>";*/
             }
-        $filedescu="documentos/conductor/FormatoAutorizacionDescuento/".' '.$update[0]['id'].' '.$update[0]['nom'].' '.$update[0]['ap'].'.pdf';
+        $filedescu="documentos/conductor/FormatoAutorizacionDescuento/".' '.$updatec['id'].' '.$updatec['nom'].' '.$updatec['ap'].'.pdf';
         }
         
         if(isset($_FILES['filecajamenor']))
@@ -267,7 +268,7 @@ class conductor extends Conexion
             $ext=substr($namefile, strrpos($namefile,'.'));
             if (in_array($ext,$formato))
             {
-                if(move_uploaded_file($nameTmpfile,"documentos/conductor/FormatoAperturaCajaMenor/".' '.$update[0]['id'].' '.$update[0]['nom'].' '.$update[0]['ap'].'.pdf'))
+                if(move_uploaded_file($nameTmpfile,"documentos/conductor/FormatoAperturaCajaMenor/".' '.$updatec['id'].' '.$updatec['nom'].' '.$updatec['ap'].'.pdf'))
                 {   
                 }
             }else{
@@ -276,7 +277,7 @@ class conductor extends Conexion
                     window.location='../CambulosMantenimiento/crudconductor.php';
                     </script>";*/
             }
-        $filecaja="documentos/conductor/FormatoAperturaCajaMenor/".' '.$update[0]['id'].' '.$update[0]['nom'].' '.$update[0]['ap'].'.pdf';
+        $filecaja="documentos/conductor/FormatoAperturaCajaMenor/".' '.$updatec['id'].' '.$updatec['nom'].' '.$updatec['ap'].'.pdf';
         }
         
         if(isset($_FILES['fileequipomovil']))
@@ -286,7 +287,7 @@ class conductor extends Conexion
             $ext=substr($namefile, strrpos($namefile,'.'));
             if (in_array($ext,$formato))
             {
-                if(move_uploaded_file($nameTmpfile,"documentos/conductor/FormatoResponsivoEquipoMovil/".' '.$update[0]['id'].' '.$update[0]['nom'].' '.$update[0]['ap'].'.pdf'))
+                if(move_uploaded_file($nameTmpfile,"documentos/conductor/FormatoResponsivoEquipoMovil/".' '.$updatec['id'].' '.$updatec['nom'].' '.$updatec['ap'].'.pdf'))
                 {   
                 }
             }else{
@@ -295,29 +296,30 @@ class conductor extends Conexion
                     window.location='../CambulosMantenimiento/crudconductor.php';
                     </script>";*/
             }
-            $filemovil="documentos/conductor/FormatoResponsivoEquipoMovil/".' '.$update[0]['id'].' '.$update[0]['nom'].' '.$update[0]['ap'].'.pdf';
+            $filemovil="documentos/conductor/FormatoResponsivoEquipoMovil/".' '.$updatec['id'].' '.$updatec['nom'].' '.$updatec['ap'].'.pdf';
+            echo $filemovil;
         }
             
           
-        $id=$update[0]['id'];
-        $nom=$update[0]['nom'];
-        $ap=$update[0]['ap'];
-        $tel=$update[0]['tel'];
-        $cat=$update[0]['catlicen'];
-        $flicen=$update[0]['venlicen'];
-        $frunt=$update[0]['frunt'];
-        $ed=$update[0]['edad'];
-        $tcon=$update[0]['tcon'];
-        $aexp=$update[0]['expe'];
-        $rol=$update[0]['rol'];
-        $idveh=$update[0]['idveh'];
+        $id=$updatec['id'];
+        $nom=$updatec['nom'];
+        $ap=$updatec['ap'];
+        $tel=$updatec['tel'];
+        $cat=$updatec['catlicen'];
+        $flicen=$updatec['venlicen'];
+        $frunt=$updatec['frunt'];
+        $ed=$updatec['edad'];
+        $tcon=$updatec['tcon'];
+        $aexp=$updatec['expe'];
+        $rol=$updatec['rol'];
+        $idveh=$updatec['idveh'];
 
         if($id=="" or($nom=="") or($ap=="") or($tel=="") or($cat=="") or($flicen=="") or($frunt=="") or($ed=="") or($tcon=="") or($aexp=="") or($rol=="") or($idveh=="") )
         {
-            /*echo "<script type='text/javascript'>
+            echo "<script type='text/javascript'>
             alert('Debe diligenciar todos los campos');
             window.location='../CambulosMantenimiento/conductorquery.php';
-            </script>";*/
+            </script>";
         }else
         {
             $sql="UPDATE conductor 
@@ -347,10 +349,10 @@ class conductor extends Conexion
             'flicen'=>$flicen, 'files'=>$ruta, 'idveh'=>$idveh, 'rol'=>$rol, 'ed'=>$ed, 'tcon'=>$tcon, 'expe'=>$aexp, 'frunt'=>$frunt,
             'ArchAutoDescuento'=>$filedescu,'ArchAperturaCaja'=>$filecaja,'ArchEquipoMovil'=>$filemovil ));
             $_SESSION['varid']=$Quercond[0]['idConductor'];
-            /*echo "<script type='text/javascript'>
+            echo "<script type='text/javascript'> 
             alert('Informacion actualizada correctamente.');
             window.location='../CambulosMantenimiento/infoconductor.php ';
-            </script>";*/
+            </script>";
         }
         
     }
@@ -609,10 +611,10 @@ class Vehiculo extends Conexion
                 {   
                 }
             }else{
-                    /*echo "<script type='text/javascript'>
-                    alert('ERROR El archivo que esta cargando debe ser PDF');
+                    echo "<script type='text/javascript'>
+                    alert('ERROR El archivo de SOAT que esta cargando debe ser PDF');
                     window.location='vehiculoupdate.php';
-                    </script>";*/
+                    </script>";
             }
             $filesoat="documentos/vehiculo/soat/".' '.$update['placa'].' '.$update['nsoat'].' '.$update['fsoat'].'.pdf';
         }
@@ -628,10 +630,10 @@ class Vehiculo extends Conexion
                 {   
                 }
             }else{
-                    /*echo "<script type='text/javascript'>
-                    alert('ERROR El archivo que esta cargando debe ser PDF');
+                    echo "<script type='text/javascript'>
+                    alert('ERROR El archivo de tecnicomecanica que esta cargando debe ser PDF');
                     window.location='vehiculoupdate.php';
-                    </script>";*/
+                    </script>";
             }
 
             $filetecnico="documentos/vehiculo/tecnicomecanica/".' '.$update['placa'].' '.$update['nsoat'].' '.$update['fsoat'].'.pdf';
@@ -648,10 +650,10 @@ class Vehiculo extends Conexion
                 {   
                 }
             }else{
-                    /*echo "<script type='text/javascript'>
-                    alert('ERROR El archivo que esta cargando debe ser PDF');
+                    echo "<script type='text/javascript'>
+                    alert('ERROR El archivo de poliza extracontraactual que esta cargando debe ser PDF');
                     window.location='vehiculoupdate.php';
-                    </script>";*/
+                    </script>";
             }
 
             $filecontra="documentos/vehiculo/polizaextracontraactual/".' '.$update['placa'].' '.$update['nsoat'].' '.$update['fsoat'].'.pdf';
@@ -669,7 +671,7 @@ class Vehiculo extends Conexion
                 }
             }else{
                     /*echo "<script type='text/javascript'>
-                    alert('ERROR El archivo que esta cargando debe ser PDF');
+                    alert('ERROR El archivo de licencia de transito que esta cargando debe ser PDF');
                     window.location='vehiculoupdate.php';
                     </script>";*/
             }
@@ -739,10 +741,10 @@ class Vehiculo extends Conexion
             'ncha'=>$nchasis,'nvim'=>$VIM,'vsoat'=>$fsoat,'psoat'=>$nsoat,'arcsoat'=>$filesoat,'ntec'=>$nrotecnico,'vtec'=>$ftecnico,'arctec'=>$filetecnico,'nlic'=>$nlicen,
             'fmatr'=>$fmatri,'archlic'=>$filematric,'uvehi'=>$act,'pcontra'=>$ncontra,'vcontra'=>$fcontra,'arccontra'=>$filecontra));
 
-            /*echo "<script type='text/javascript'>
+            echo "<script type='text/javascript'>
             alert('Informacion del vehiculo a sido actualizada exitosamente');
             window.location='vehiculoquery.php';
-            </script>";*/
+            </script>";
         
         }
     }
@@ -796,5 +798,73 @@ class actividad extends conexion
         }
         return $this->qactividad;
     }
+}
+class comparendo extends Conexion
+{
+
+    private $compar=array();
+    private $compa=array();
+    private $comp=array();
+    
+    public function querycomparvehicle($id)
+    {
+        $sql="SELECT * FROM comparendos 
+        INNER JOIN Vehiculo
+        ON comparendos.Vehiculo_IdVehiculoo=vehiculo.idVehiculo
+        WHERE comparendos.Vehiculo_IdVehiculoo=:id AND comparendos.Eliminar=1";
+        $rest=$this->conex->prepare($sql);
+        $rest->execute(array('id'=>$id));
+        while($res=$rest->fetch(PDO::FETCH_ASSOC))
+        {
+            $this->compar[]=$res;
+        }
+        return $this->compar;
+    }
+    public function querycomparconddriver($id)
+    {
+        $sql="SELECT * FROM comparendos 
+        INNER JOIN conductor
+        ON comparendos.Conductor_IdConductor=conductor.idConductor
+        WHERE comparendos.Conductor_IdConductor=:id AND comparendos.Eliminar=1";
+        $rest=$this->conex->prepare($sql);
+        $rest->execute(array('id'=>$id));
+        while($res=$rest->fetch(PDO::FETCH_ASSOC))
+        {
+            $this->compa[]=$res;
+        }
+        return $this->compa;
+    }
+    public function makefindcomp($id)
+    {
+        $finds= new comparendo;
+        $fin=$finds->querycomparvehicle($id);
+        
+        if(sizeof($fin)==0)
+        {
+            $fin=$finds->querycomparconddriver($id);
+        }
+        return $fin; 
+    }
+    public function simit($id)
+    {
+        $finds= new comparendo;
+        $fin=$finds->querycomparvehicle($id);
+        
+        if(sizeof($fin)>0)
+        {
+            $simi=$fin[0]['Placa'];
+        }
+        if(sizeof($fin)==0)
+        {
+            $fin=$finds->querycomparconddriver($id);
+            if(sizeof($fin)>0)
+            {
+                $simi=$fin[0]   ['idConductor'];
+            }
+            
+        }
+        return $simi; 
+    }
+
 }
 ?>

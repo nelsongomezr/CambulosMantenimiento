@@ -142,7 +142,6 @@ $nav= new rol;
 </html>
 <?php
 if(isset($_POST['update'])){
-    $update[]=$_POST;
-    $que=$query->updateconductor($update);
+    $up=$query->updateconductor($_POST);
 }
 ?>

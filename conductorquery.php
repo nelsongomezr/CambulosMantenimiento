@@ -100,8 +100,8 @@ if(isset($_POST['congeneral']))
     
     <div class="container">
         <hr>
-        <div class="div">
-            <table class="table table-striped table-hover">
+        <div class="table-responsive">
+            <table class="table table-striped table-hover table-sm">
                 <thead class="thead">
                     <th scope="col">Identificacion</th>
                     <th scope="col">Nombre</th>
