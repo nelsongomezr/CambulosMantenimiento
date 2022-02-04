@@ -1,6 +1,6 @@
 <?php
     session_start();
-    if($_SESSION==null || $_SESSION=="")
+if($_SESSION==null || $_SESSION=="")
 {
     echo "<script type='text/javascript'>
     alert('usted no tiene acceso permitido');
@@ -9,11 +9,17 @@
     die();
 }
 require('class/class.php');
-$id=$_GET['id'];
+if(empty($_GET['id']))
+{
+    $id=$_SESSION['varid'];
+}else
+{
+    $id=$_GET['id'];
+}
 $nav=new rol;
 $comp= new comparendo;
 $com=$comp->makefindcomp($id);
-$simit=$comp->simit($id);
+$simi=$comp->simit($id);
 ?>
 <!doctype html>
 <html lang="en">
@@ -29,7 +35,7 @@ $simit=$comp->simit($id);
     <br><center><h1>REPORTE COMPARENDOS</h1></center>
 
     <div class="accordion accordion-flush container" id="accordionFlushExample">
-        <form method="POST" enctype="multipart/form-data">
+        <form method="POST">
         <div class="accordion-item bg-secondary bg-opacity-10">
             <h2 class="accordion-header" id="flush-headingOne">
                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
@@ -39,6 +45,11 @@ $simit=$comp->simit($id);
         <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
             <form method="POST">
             <div class="accordion-body">
+                <label class="form-label">
+                    <label class="form-label">
+                    <b>Numero</b><br>
+                    <input type="number" name="NroComp" class="form-control">
+                    </label>
                 <label class="form-label">
                     <b>Tipo</b><br>
                     <input type="text" name="Tipo" class="form-control">
@@ -57,19 +68,20 @@ $simit=$comp->simit($id);
                 </label>
                 <label class="form-label">
                     <b>Estado</b><br>
-                    <input type="text" name="estado " class="form-control">
+                    <input type="text" name="estado" class="form-control">
                 </label>
                 <label class="form-label">
                     <b>Valor</b><br>
-                    <input type="text" name="estado " class="form-control">
+                    <input type="text" name="val" class="form-control">
                 </label>
                 <label class="form-label">
                     <b>Valor a pagar</b><br>
-                    <input type="text" name="estado " class="form-control">
+                    <input type="text" name="valapa" class="form-control">
                 </label><br>
+                <input type="hidden" name="id" value="<?php echo $id;?>">
                 <input type="submit" name="regustrar" value="REGISTRAR" class="btn btn-dark w-50">
                 <button type="button" class="btn btn-light">
-              <a href="https://fcm.org.co/simit/#/estado-cuenta?numDocPlacaProp=<?php echo $simit?>"target='_blank'><b>Realizar consulta en el SIMIT</b></a>
+              <a href="https://fcm.org.co/simit/#/estado-cuenta?numDocPlacaProp=<?php echo $simi?>"target='_blank'><b>Realizar consulta en el SIMIT</b></a>
             </button>
             </form>
             </div>
@@ -86,6 +98,7 @@ $simit=$comp->simit($id);
                 <div class="table-responsive">
                     <table class="table table-striped table-hover table-sm">
                         <thead>
+                            <th scope="col">#</th>
                             <th scope="col">Tipo</th>
                             <th scope="col">Fecha</th>
                             <th scope="col">Secretaria</th>
@@ -99,6 +112,8 @@ $simit=$comp->simit($id);
                         <?php
                             for($i=0;$i<sizeof($com);$i++){
                         ?>
+                        <tr>
+                            <td><?php echo $com[$i]['NroComp']?></td>
                             <td><?php echo $com[$i]['TipoComparendo']?></td>
                             <td><?php echo $com[$i]['Fecha']?></td>
                             <td><?php echo $com[$i]['Secretaria']?></td>
@@ -106,10 +121,12 @@ $simit=$comp->simit($id);
                             <td><?php echo $com[$i]['Estado']?></td>
                             <td><?php echo $com[$i]['Valor']?></td>
                             <td><?php echo $com[$i]['ValorApagar']?></td>
-                            <td><?php echo'<a href=reportecomparendos.php?id='.$id.'>' ?><img src="img/contrato.png" alt="Actualizar documento" width="30"></a></td>
-                            <td><?php echo'<a href=reportecomparendos.php?id='.$id.'>' ?><img src="img/eliminarDocumento.png" alt="Eliminar documento" width="30"></a></a></td>
-                            
+                            <?php $idc=$com[$i]['NroComp'];?>
+                            <td><?php echo'<a href=comparendoupdate.php?id='.$idc.'>' ?><img src="img/contrato.png" alt="Actualizar documento" width="30"></a></td>
+                            <td><?php echo'<a href=comparendodelete.php?id='.$idc.'>' ?><img src="img/eliminarDocumento.png" alt="Eliminar documento" width="30"></a></a></td>
+                        </tr>
                         <?php } ?>
+                        <tr><input type="submit" value="ACTUALIZAR" class="btn btn-dark w-50"><tr>
                     </table>
                 </div>
             </div>
@@ -127,3 +144,11 @@ $simit=$comp->simit($id);
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
   </body>
 </html>
+<?php
+
+if(isset($_POST['regustrar']))
+{
+ $inf=$comp->insertcomparendo($_POST);
+}
+
+?>

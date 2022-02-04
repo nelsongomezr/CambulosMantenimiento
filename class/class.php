@@ -748,6 +748,17 @@ class Vehiculo extends Conexion
         
         }
     }
+    public function queryvehiculoid($id)
+    {
+        $sql="SELECT * FROM `vehiculo` WHERE vehiculo.idVehiculo=:id AND vehiculo.Estado=1";
+        $rest=$this->conex->prepare($sql);
+        $rest->execute(array('id'=>$id));
+        while($res=$rest->fetch(PDO::FETCH_ASSOC))
+        {
+            $this->queve[]=$res;
+        }
+        return $this->queve;
+    }
 }
 class user extends Conexion
 {
@@ -805,8 +816,70 @@ class comparendo extends Conexion
     private $compar=array();
     private $compa=array();
     private $comp=array();
-    
+    private $com=array();
+    public function insertcomparendo($comp)
+    // registra la informacion del comparendo en la base
+    {
+        $nrpcomp=$comp['NroComp'];
+        $tip=$comp['Tipo'];
+        $fech=$comp['fecha'];
+        $sec=$comp['secretaria'];
+        $infrac=$comp['infraccion'];
+        $est=$comp['estado'];
+        $val=$comp['val'];
+        $valapa=$comp['valapa'];
+        $id=$comp['id'];
+
+        if($nrpcomp=="" or($tip)=="" or($fech)=="" or($sec)=="" or($infrac)=="" or($est)=="" or($val)=="" or($valapa)=="" or($id)=="")
+        {
+            /*echo "<script type='text/javascript'>
+            alert('Debe diligenciar todos los campos');
+            window.location='../CambulosMantenimiento/reportecomparendos.php';
+            </script>";*/
+        }else
+        {
+            $conductor= new conductor;
+            $quericonductor=$conductor->queryconductor($comp['id']);
+            $querycom=new comparendo;
+            $queryco=$querycom->querynrocomparendo($nrpcomp);
+            if(sizeof($queryco)<=0)
+            {
+                if(sizeof($quericonductor)>0)
+                {
+                    $sql="INSERT INTO comparendos
+                    values(NULL,:nrpcomp,:tip,:fech,:sec,:infrac,:est,:val,:valapa,1,:id,NULL)";
+                    $rest=$this->conex->prepare($sql);
+                    $rest->execute(array('nrpcomp'=>$nrpcomp,'tip'=>$tip,'fech'=>$fech,'sec'=>$sec,'infrac'=>$infrac,'est'=>$est,'val'=>$val,'valapa'=>$valapa,'id'=>$id));
+                    echo "<script> alert('Comparendo registrado exitosamente'); </script>";
+
+                }else
+                {
+                    $sql="INSERT INTO comparendos
+                    values(NULL,:nrpcomp,:tip,:fech,:sec,:infrac,:est,:val,:valapa,1,NULL,:id)";
+                    $rest=$this->conex->prepare($sql);
+                    $rest->execute(array('nrpcomp'=>$nrpcomp,'tip'=>$tip,'fech'=>$fech,'sec'=>$sec,'infrac'=>$infrac,'est'=>$est,'val'=>$val,'valapa'=>$valapa,'id'=>$id));
+                    /*echo "<script> alert('Comparendo registrado exitosamente'); </script>";*/
+                }
+            }else
+            {
+                //echo "<script> alert('Comparendo ya se encuentra registrado'); </script>";
+            }
+        }
+    }
+    public function querynrocomparendo($nro)
+    //consulta comparendos por numero de comparendo
+    {
+        $sql="SELECT * FROM `comparendos` WHERE comparendos.NroComp=:nrocomp";
+        $rest=$this->conex->prepare($sql);
+        $rest->execute(array('nrocomp'=>$nro));
+        while($res=$rest->fetch(PDO::FETCH_ASSOC))
+        {
+            $this->com[]=$res;
+        }
+        return $this->com;
+    }
     public function querycomparvehicle($id)
+     // consulta comparendos por placa de vehiculo
     {
         $sql="SELECT * FROM comparendos 
         INNER JOIN Vehiculo
@@ -821,6 +894,7 @@ class comparendo extends Conexion
         return $this->compar;
     }
     public function querycomparconddriver($id)
+    // consulta comparendos por id de conductor
     {
         $sql="SELECT * FROM comparendos 
         INNER JOIN conductor
@@ -835,36 +909,106 @@ class comparendo extends Conexion
         return $this->compa;
     }
     public function makefindcomp($id)
-    {
+    /* incluye en una sola funcion las funciones querycomparconddriver y  querycomparconddriver para automatizar 
+    el uso de cada una, dependiendo del id que se ingrese para la consulta (conductor o vehiculo)*/
+    {  
+         
         $finds= new comparendo;
         $fin=$finds->querycomparvehicle($id);
-        
+
         if(sizeof($fin)==0)
         {
             $fin=$finds->querycomparconddriver($id);
+            
         }
         return $fin; 
     }
-    public function simit($id)
+    public function simit($ids)
+    // envia el id del condutor o la placa del vehiculo para realizar la consulta en el SIMIT
     {
-        $finds= new comparendo;
-        $fin=$finds->querycomparvehicle($id);
-        
-        if(sizeof($fin)>0)
+        $vehiculo=new vehiculo;
+        $placa=$vehiculo->queryvehiculoid($ids);
+        print_r($placa);
+        if(sizeof($placa)>0)
         {
-            $simi=$fin[0]['Placa'];
-        }
-        if(sizeof($fin)==0)
+            $simit=$placa[0]['Placa'];
+        }else
         {
-            $fin=$finds->querycomparconddriver($id);
-            if(sizeof($fin)>0)
-            {
-                $simi=$fin[0]   ['idConductor'];
-            }
-            
+            $simit=$ids;    
         }
-        return $simi; 
+        return $simit;
     }
+    public function updatecomparendo($compup)
+    //realiza update de los datos del comparendo en la base
+    {
+        $NroComp=$compup['NroComp'];
+        $TComp=$compup['Tipo'];
+        $Fcomp=$compup['fecha'];
+        $sec=$compup['secretaria'];
+        $infrac=$compup['infraccion'];
+        $est=$compup['estado'];
+        $val=$compup['val'];
+        $valapa=$compup['valapa'];
+        $id=$compup['id'];
 
+        $valid=new comparendo;
+        $valida=$valid->querycomparconddriver($compup['id']);
+        if($NroComp=="" or($TComp)=="" or($Fcomp)=="" or($sec)=="" or($infrac)=="" or($est)=="" or($val)=="" or($valapa)=="" or($id)=="")
+        {
+            echo "<script type='text/javascript'>
+            alert('Debe diligenciar todos los campos');
+            window.location='comparendoupdate.php';
+            </script>";
+        }else
+        {   
+            if(sizeof($valida)>0)
+            {
+                $sql="UPDATE comparendos SET 
+                comparendos.NroComp=:ncomp,
+                comparendos.TipoComparendo=:tcomp,
+                comparendos.Fecha=:fcomp,
+                comparendos.Secretaria=:scomp,
+                comparendos.Infraccion=:infcomp,
+                comparendos.Estado=:ecomp,
+                comparendos.Valor=:vcomp,
+                comparendos.ValorApagar=:vpcomp,
+                comparendos.Eliminar=1,
+                comparendos.Conductor_IdConductor=:id
+                WHERE comparendos.NroComp=:ncomp";
+            }else
+            {
+                $sql="UPDATE comparendos SET 
+                comparendos.NroComp=:ncomp,
+                comparendos.TipoComparendo=:tcomp,
+                comparendos.Fecha=:fcomp,
+                comparendos.Secretaria=:scomp,
+                comparendos.Infraccion=:infcomp,
+                comparendos.Estado=:ecomp,
+                comparendos.Valor=:vcomp,
+                comparendos.ValorApagar=:vpcomp,
+                comparendos.Eliminar=1,
+                comparendos.Vehiculo_IdVehiculoo=:id
+                WHERE comparendos.NroComp=:ncomp";
+            }
+
+            $rest=$this->conex->prepare($sql);
+            $rest->execute(array('ncomp'=>$NroComp, 'tcomp'=>$TComp, 'fcomp'=>$Fcomp, 'scomp'=>$sec, 'infcomp'=>$infrac, 'ecomp'=>$est, 'vcomp'=>$val, 'vpcomp'=>$valapa, 'id'=>$id));
+            $_SESSION['comparendo']=$NroComp;
+            echo "<script type='text/javascript'>
+            alert('Comparendo actualizado correctamente');
+            window.location='comparendoupdate.php';
+            </script>";
+        }    
+    }
+    public function deletecomparendo($del)
+    {
+            $sql="UPDATE comparendos SET comparendos.Eliminar=0 WHERE comparendos.NroComp=:del";
+            $rest=$this->conex->prepare($sql);
+            $rest->execute(array('del'=>$del));
+            echo "<script type='text/javascript'>
+            alert('Comparendo eliminado exitosamente');
+            window.location='reportecomparendos.php';
+            </script>";
+    }
 }
 ?>
