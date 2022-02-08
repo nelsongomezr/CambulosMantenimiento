@@ -10,5 +10,6 @@ if($_SESSION==null || $_SESSION=="")
 }
 require('class/class.php');
 $delete= new comparendo;
-$del=$delete->deletecomparendo($_GET['id']);
+$delet=$delete->deletecomparendo($_GET['id']);
+
 ?>

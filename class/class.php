@@ -611,10 +611,10 @@ class Vehiculo extends Conexion
                 {   
                 }
             }else{
-                    echo "<script type='text/javascript'>
+                    /*echo "<script type='text/javascript'>
                     alert('ERROR El archivo de SOAT que esta cargando debe ser PDF');
                     window.location='vehiculoupdate.php';
-                    </script>";
+                    </script>";*/
             }
             $filesoat="documentos/vehiculo/soat/".' '.$update['placa'].' '.$update['nsoat'].' '.$update['fsoat'].'.pdf';
         }
@@ -630,10 +630,10 @@ class Vehiculo extends Conexion
                 {   
                 }
             }else{
-                    echo "<script type='text/javascript'>
+                    /*echo "<script type='text/javascript'>
                     alert('ERROR El archivo de tecnicomecanica que esta cargando debe ser PDF');
                     window.location='vehiculoupdate.php';
-                    </script>";
+                    </script>";*/
             }
 
             $filetecnico="documentos/vehiculo/tecnicomecanica/".' '.$update['placa'].' '.$update['nsoat'].' '.$update['fsoat'].'.pdf';
@@ -650,10 +650,10 @@ class Vehiculo extends Conexion
                 {   
                 }
             }else{
-                    echo "<script type='text/javascript'>
+                    /*echo "<script type='text/javascript'>
                     alert('ERROR El archivo de poliza extracontraactual que esta cargando debe ser PDF');
                     window.location='vehiculoupdate.php';
-                    </script>";
+                    </script>";*/
             }
 
             $filecontra="documentos/vehiculo/polizaextracontraactual/".' '.$update['placa'].' '.$update['nsoat'].' '.$update['fsoat'].'.pdf';
@@ -740,10 +740,10 @@ class Vehiculo extends Conexion
             'pesb'=>$pbruto,'nejes'=>$nejes,'nllan'=>$nllantas,'dllan'=>$dimllantas,'tdir'=>$tdir,'ltotal'=>$ltotal,'alt'=>$alto,'anch'=>$ancho,'entreeje'=>$dejes,'nmot'=>$nmot,
             'ncha'=>$nchasis,'nvim'=>$VIM,'vsoat'=>$fsoat,'psoat'=>$nsoat,'arcsoat'=>$filesoat,'ntec'=>$nrotecnico,'vtec'=>$ftecnico,'arctec'=>$filetecnico,'nlic'=>$nlicen,
             'fmatr'=>$fmatri,'archlic'=>$filematric,'uvehi'=>$act,'pcontra'=>$ncontra,'vcontra'=>$fcontra,'arccontra'=>$filecontra));
-
+            $_SESSION['placa']=$update['placa'];
             echo "<script type='text/javascript'>
             alert('Informacion del vehiculo a sido actualizada exitosamente');
-            window.location='vehiculoquery.php';
+            window.location='vehiculoupdate.php';
             </script>";
         
         }
@@ -812,7 +812,6 @@ class actividad extends conexion
 }
 class comparendo extends Conexion
 {
-
     private $compar=array();
     private $compa=array();
     private $comp=array();
@@ -832,10 +831,10 @@ class comparendo extends Conexion
 
         if($nrpcomp=="" or($tip)=="" or($fech)=="" or($sec)=="" or($infrac)=="" or($est)=="" or($val)=="" or($valapa)=="" or($id)=="")
         {
-            /*echo "<script type='text/javascript'>
+            echo "<script type='text/javascript'>
             alert('Debe diligenciar todos los campos');
             window.location='../CambulosMantenimiento/reportecomparendos.php';
-            </script>";*/
+            </script>";
         }else
         {
             $conductor= new conductor;
@@ -858,18 +857,37 @@ class comparendo extends Conexion
                     values(NULL,:nrpcomp,:tip,:fech,:sec,:infrac,:est,:val,:valapa,1,NULL,:id)";
                     $rest=$this->conex->prepare($sql);
                     $rest->execute(array('nrpcomp'=>$nrpcomp,'tip'=>$tip,'fech'=>$fech,'sec'=>$sec,'infrac'=>$infrac,'est'=>$est,'val'=>$val,'valapa'=>$valapa,'id'=>$id));
-                    /*echo "<script> alert('Comparendo registrado exitosamente'); </script>";*/
+                    echo "<script> alert('Comparendo registrado exitosamente'); </script>";
                 }
             }else
             {
-                //echo "<script> alert('Comparendo ya se encuentra registrado'); </script>";
+                echo "<script> alert('Comparendo ya se encuentra registrado'); </script>";
             }
         }
     }
     public function querynrocomparendo($nro)
-    //consulta comparendos por numero de comparendo
+    //consulta comparendos por numero de comparendo con datos del conductor
     {
-        $sql="SELECT * FROM `comparendos` WHERE comparendos.NroComp=:nrocomp";
+        $sql="SELECT * FROM `comparendos` 
+        INNER JOIN Conductor
+        ON comparendos.Conductor_IdConductor=conductor.idConductor
+        WHERE comparendos.NroComp=:nrocomp";
+        $rest=$this->conex->prepare($sql);
+        $rest->execute(array('nrocomp'=>$nro));
+        while($res=$rest->fetch(PDO::FETCH_ASSOC))
+        {
+            $this->com[]=$res;
+        }
+        return $this->com;
+    }
+
+    public function querynrocomparendovehi($nro)
+    //consulta comparendos por numero de comparendo con datos del conductor
+    {
+        $sql="SELECT * FROM comparendos
+        INNER JOIN vehiculo
+        ON comparendos.Vehiculo_IdVehiculoo=vehiculo.idVehiculo
+        WHERE comparendos.NroComp=:nrocomp";
         $rest=$this->conex->prepare($sql);
         $rest->execute(array('nrocomp'=>$nro));
         while($res=$rest->fetch(PDO::FETCH_ASSOC))
@@ -928,7 +946,6 @@ class comparendo extends Conexion
     {
         $vehiculo=new vehiculo;
         $placa=$vehiculo->queryvehiculoid($ids);
-        print_r($placa);
         if(sizeof($placa)>0)
         {
             $simit=$placa[0]['Placa'];
@@ -939,6 +956,7 @@ class comparendo extends Conexion
         return $simit;
     }
     public function updatecomparendo($compup)
+
     //realiza update de los datos del comparendo en la base
     {
         $NroComp=$compup['NroComp'];
@@ -1001,14 +1019,34 @@ class comparendo extends Conexion
         }    
     }
     public function deletecomparendo($del)
+    // desabilita el registro del comparendo para que no sea visible en las consultas
     {
             $sql="UPDATE comparendos SET comparendos.Eliminar=0 WHERE comparendos.NroComp=:del";
             $rest=$this->conex->prepare($sql);
             $rest->execute(array('del'=>$del));
+
+            $delete= new comparendo;
+            $compar=$delete->querynrocomparendo($del);
+            if(sizeof($compar)>0)
+            {
+                echo $_SESSION['varid']=$compar[0]['Conductor_IdConductor'];   
+                
+                echo "<script type='text/javascript'>
+                alert('Comparendo eliminado exitosamente');
+                window.location='reportecomparendos.php';
+                </script>";
+            }else
+            {
+            echo $_SESSION['varid'];
+            $comprvehi=$delete->querynrocomparendovehi($_GET['id']);
+            $_SESSION['varid']=$comprvehi[0]['Vehiculo_IdVehiculoo'];
+
             echo "<script type='text/javascript'>
             alert('Comparendo eliminado exitosamente');
             window.location='reportecomparendos.php';
             </script>";
+            }
+            
     }
 }
 ?>

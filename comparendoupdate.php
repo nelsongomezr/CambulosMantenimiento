@@ -1,31 +1,37 @@
     <?php
         session_start();
-    if($_SESSION==null || $_SESSION=="")
-    {
-        echo "<script type='text/javascript'>
-        alert('usted no tiene acceso permitido');
-        window.location='index.php';
-        </script>";
-        die();
-    }
-    if(empty($_GET['id']))
-    {
-        $idco=$_SESSION['comparendo'];
-    }else
-    {
-        $idco=$_GET['id'];
-    }
+        if($_SESSION==null || $_SESSION=="")
+        {
+            echo "<script type='text/javascript'>
+            alert('usted no tiene acceso permitido');
+            window.location='index.php';
+            </script>";
+            die();
+        }
+        error_reporting(0); 
+
+            if(empty($_GET['id']))  
+         {
+             $idco=$_SESSION['comparendo'];
+         }
+             if(!empty($_GET['id']>0))
+         {
+             $idco=$_GET['id'];
+         }
+         
+        
     require('class/class.php');
     $nav=new rol;
     $comp= new comparendo;
     $com=$comp->querynrocomparendo($idco);
-    if(empty($com[0]['Conductor_IdConductor']))
+    if(sizeof($com)>0)
     {
-        $id=$com[0]['Vehiculo_IdVehiculoo'];
+        $id=$com[0]['idConductor'];
     }else
     {
-        $id=$com[0]['Conductor_IdConductor'];
-    }
+        $com=$comp->querynrocomparendovehi($idco);
+        $id=$com[0]['Vehiculo_IdVehiculoo'];
+    } 
     ?>
     <!doctype html>
     <html lang="en">

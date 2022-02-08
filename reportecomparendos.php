@@ -12,6 +12,7 @@ require('class/class.php');
 if(empty($_GET['id']))
 {
     $id=$_SESSION['varid'];
+    
 }else
 {
     $id=$_GET['id'];

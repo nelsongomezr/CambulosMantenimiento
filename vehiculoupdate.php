@@ -1,6 +1,21 @@
 <?php 
-$pla=$_GET['id'];
 session_start();
+if($_SESSION==null || $_SESSION=="")
+{
+    echo "<script type='text/javascript'>
+    alert('usted no tiene acceso permitido');
+    window.location='index.php';
+    </script>";
+    die();
+}
+if (empty($_GET))
+{
+ $pla=$_SESSION['placa'];
+}else
+{
+    $pla=$_GET['id'];
+}
+
 require('class/class.php');
 $nav= new rol;
 $act=new actividad;
@@ -257,7 +272,7 @@ $veh=$vehi->queryvehiculoplacaupdate($pla);
                     <input type="date" name="fcontractual" class="form-control" value="<?php echo $veh[0]['VencePolizaContraactual'];?>">
                 </label>
                 <label class="form-label">
-                    <b>Cargar PDF Tecnicomecanica</b><br>
+                    <b>Cargar PDF Poliza extracontractual</b><br>
                     <input name="filecontractual" class="form-control" type="file" id="formFile" value="<?php echo $veh[0]['archPolizaContraActual'];?>">
                 </label>   
             </div>

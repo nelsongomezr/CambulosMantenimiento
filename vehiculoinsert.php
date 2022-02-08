@@ -255,7 +255,7 @@ $acti=$act->queryactividad();
                     <input type="date" name="fcontractual" class="form-control">
                 </label>
                 <label class="form-label">
-                    <b>Cargar PDF Tecnicomecanica</b><br>
+                    <b>Cargar PDF Poliza extracontractual</b><br>
                     <input name="filecontractual" class="form-control" type="file" id="formFile">
                 </label>   
             </div>
