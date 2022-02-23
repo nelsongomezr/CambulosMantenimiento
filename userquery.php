@@ -10,13 +10,13 @@ if($_SESSION==null || $_SESSION=="")
 }
 require('class/class.php');
 $nav=new rol;
-$query=new conductor;
+$query=new user;
 if(isset($_POST['condoc']))
 {
     if($_POST['consulta']==1)
     {
         $id=$_POST['doc'];
-        $quer=$query->queryconductor($id);
+        $quer=$query->queryuser($id);
         if(sizeof($quer)=="")
         {
             echo "<script type='text/javascript'>
@@ -27,8 +27,8 @@ if(isset($_POST['condoc']))
     }
     if($_POST['consulta']==2)
     {
-        $nom=$_POST['doc'].'%';
-        $quer=$query->queryconductorname($nom);
+        $nom=$_POST['doc'];
+        $quer=$query->quereyusername($nom);
         if(sizeof($quer)=="")
         {
             echo "<script type='text/javascript'>
@@ -47,7 +47,7 @@ if(isset($_POST['condoc']))
 }
 if(isset($_POST['congeneral']))
 {
-    $quer=$query->queryallconductor();
+    $quer=$query->queryalluser();
 }
 ?>
 
@@ -58,7 +58,7 @@ if(isset($_POST['congeneral']))
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-    <title>Consulta conductor</title>
+    <title>Consulta usuarios</title>
 </head>
 <body>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
@@ -68,7 +68,7 @@ if(isset($_POST['congeneral']))
     <div class="container">
         <div class="card-footer text-muted bg-dark">
             <div class="card-header">
-            <h1>CONSULTA CONDUCTORES</h1>
+            <h1>CONSULTA USUARIOS</h1>
             </div>
             <div class="card-footer text-muted bg-dark">
                 <form method="POST">
@@ -90,7 +90,7 @@ if(isset($_POST['congeneral']))
                     </label>
                 </div>
                 <input type="submit" name="condoc" value="Buscar" class="btn btn-dark">   
-                <input type="submit" name="congeneral" value="Ver todos los conductores" class="btn btn-dark">
+                <input type="submit" name="congeneral" value="Ver todos los usuarios" class="btn btn-dark">
                 </form>
             </div>
         </div>
@@ -116,12 +116,12 @@ if(isset($_POST['congeneral']))
                     {
                 ?>
                 <tr>
-                    <td scope="row"><?php echo $quer[$i]['idConductor']?></td>
+                    <td scope="row"><?php echo $quer[$i]['idUsuario']?></td>
                     <td scope="row"><?php echo $quer[$i]['Nombre']?></td>
                     <td scope="row"><?php echo $quer[$i]['Apellido']?></td>     
-                    <td scope="row"><?php echo'<a href=infoconductor.php?id='.$id=$quer[$i]['idConductor'].'>'; ?>ver mas</a></td>
-                    <td scope="row"><?php echo'<a href=conductorupdate.php?id='.$id=$quer[$i]['idConductor'].'>'; ?><img src="img/editar usuario.png" alt="Editar usuario" width="30"></a></td>
-                    <td scope="row"><?php echo'<a href=conductordelete.php?id='.$id=$quer[$i]['idConductor'].'>'; ?><img src="img/eliminar usuario.png" alt="Eliminar usuario" width="30"></a></td>
+                    <td scope="row"><?php echo'<a href=userinfo.php?id='.$id=$quer[$i]['idUsuario'].'>'; ?>ver mas</a></td>
+                    <td scope="row"><?php echo'<a href=userupdate.php?id='.$id=$quer[$i]['idUsuario'].'>'; ?><img src="img/editar usuario.png" alt="Editar usuario" width="30"></a></td>
+                    <td scope="row"><?php echo'<a href=userdelete.php?id='.$id=$quer[$i]['idUsuario'].'>'; ?><img src="img/eliminar usuario.png" alt="Eliminar usuario" width="30"></a></td>
                 </tr>
                 <?php
                 }

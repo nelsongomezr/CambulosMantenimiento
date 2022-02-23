@@ -9,10 +9,12 @@
     die();
 }
     require('class/class.php');
+    $alert=new alerts;
+    $aler=$alert->alertasVencimientosVehiculo();
     $nav=new rol;
     $queryuser= new user;
     $queryuse=$queryuser->queryuser($_SESSION['USUARIO']);
-
+    
 ?>
 
 <!doctype html>

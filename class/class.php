@@ -767,20 +767,156 @@ class user extends Conexion
     private $u=array();
     
     public function queryuser($id)
+     // realiza consulta de usuarios por id
     {
-        $sql="SELECT * FROM `usuario` INNER JOIN rol ON USUARIO.Rol_idRol=rol.idRol WHERE usuario.idUsuario=:id";
-        $rest=$this->conex->prepare($sql);
-        $rest->execute(array('id'=>$id));
-        while($res=$rest->fetch(PDO::FETCH_ASSOC))
+        if($id=="")
+        {
+            echo "<script type='text/javascript'>
+            alert('Debe diligenciar el Numero de Cedula');
+            window.location='userquery.php';
+            </script>";
+
+        }else{
+
+            $sql="SELECT * FROM `usuario` INNER JOIN rol ON USUARIO.Rol_idRol=rol.idRol WHERE usuario.idUsuario=:id AND usuario.Estado=1";
+            $rest=$this->conex->prepare($sql);
+            $rest->execute(array('id'=>$id));
+            while($res=$rest->fetch(PDO::FETCH_ASSOC))
         {
             $this->use[]=$res;
         }
         return $this->use;
+        
+        }
+        
+    }
+    public function quereyusername($nom)
+    // realiza consulta de usuarios por nombre o apellido
+    {
+        if($nom=="")
+        {
+            echo "<script type='text/javascript'>
+                    alert('Ingrese el nombre o apellido a consultar');
+                    window.location='userquery.php';
+                    </script>";
+        }else
+        {
+            $nomb= $nom.'%';
+            $sql="SELECT * FROM `usuario` WHERE usuario.Estado=1 AND usuario.Nombre LIKE :nom OR usuario.Apellido LIKE :nom ORDER by usuario.Nombre ASC";
+            $rest=$this->conex->prepare($sql);
+            $rest->execute(array('nom'=>$nomb));
+            while($res=$rest->fetch(PDO::FETCH_ASSOC))
+            {
+                $this->u[]=$res;
+            }
+            return $this->u;
+        }
+    }
+    public function queryalluser()
+     // realiza consulta de todos los usuarios registrados
+    {
+        $sql="SELECT * FROM `usuario` where usuario.estado=1";
+        $rest=$this->conex->prepare($sql);
+        $rest->execute(array());
+        while($res=$rest->fetch(PDO::FETCH_ASSOC))
+        {
+            $this->us[]=$res;
+        }
+        return $this->us;
+    }
+    public function insertuser($inf)
+    //realiza el registro de usuarios
+    {
+        print_r($inf);
+        if($inf[0]['idcond']=="" or($inf[0]['nom'])=="" or($inf[0]['ape'])=="" or($inf[0]['email'])=="" or($inf[0]['tel'])=="" or($inf[0]['rol'])=="")
+        {
+            echo "<script type='text/javascript'>
+                    alert('debe diligenciar todos los campos');
+                    </script>";
+            
+        }else
+        {
+            $inf[0]['idcond'];
+            $pass=crypt(10,$inf[0]['idcond']);
+            $sql="INSERT INTO usuario VALUES(:id,:nom,:ap,:email,:tel,:rol,:pass)";
+            $rest=$this->conex->prepare($sql);
+            $rest->execute(array('id'=>$inf[0]['idcond'],'nom'=>$inf[0]['nom'],'ap'=>$inf[0]['ape'],'email'=>$inf[0]['email'],
+            'tel'=>$inf[0]['tel'],'rol'=>$inf[0]['rol'], 'pass'=>$pass));
+            echo "<script type='text/javascript'>
+            alert('debe diligenciar todos los campos');
+            </script>";
+        }
+        
+    }
+    public function updateuser($inf)
+    //actualiza la informacion del usuario
+    {
+        print_r($inf);
+        
+
+        if($inf['idcond']=="" or($inf['nom'])=="" or($inf['ape'])=="" or($inf['tel'])=="" or($inf['email'])=="" or($inf['rol'])=="")
+        {
+
+            echo "<script type='text/javascript'>
+                    alert('debe diligenciar todos los campos');
+                   
+                    </script>";
+
+        }else
+        {
+            $inf['idcond'];
+            $pass=crypt(10,$inf['idcond']);
+            $sql="UPDATE usuario SET usuario.idUsuario=:id, usuario.Nombre=:nom, usuario.Apellido=:ap,usuario.Email=:email, usuario.Telefono=:tel, usuario.Rol_idRol=:rol WHERE usuario.idUsuario=:id";
+            $rest=$this->conex->prepare($sql);
+            $rest->execute(array('id'=>$inf['idcond'],'nom'=>$inf['nom'],'ap'=>$inf['ape'],'email'=>$inf['email'],'tel'=>$inf['tel'],'rol'=>$inf['rol'], 'pass'=>$pass));
+            $_SESSION['varid']=$inf['idcond'];
+            echo "<script type='text/javascript'>
+            alert('Informacion actualizada correctamente');
+            window.location='userinfo.php';
+            </script>";
+        }
+        
+    }
+    public function deleteuser($id)
+    {
+        $sql="UPDATE usuario SET usuario.Estado=0 WHERE usuario.idUsuario=:id";
+        $rest=$this->conex->prepare($sql);
+        $rest->execute(array('id'=>$id));
+        echo "<script type='text/javascript'>
+        alert('El usuario se elimino correctamente');
+        window.location='userquery.php';
+        </script>";
     }
 }
 class Rol extends Conexion
 {
+    private $rol=array();
+    private $ro=array();
+    public function queryAllRol()
+    {
+        $sql="SELECT * from rol";
+        $rest=$this->conex->prepare($sql);
+        $rest->execute(array());
+        foreach($rest as $res)
+        {
+            $this->rol[]=$res;
+        }
+        return $this->rol;
+    }
+    public function queryUserId($id)
+    {
+        $sql="SELECT * FROM usuario WHERE usuario.idUsuario=:id";
+        $rest=$this->conex->prepare($sql);
+        $rest->execute(array('id'=>$id));
+        foreach($rest as $res)
+        {
+            $this->ro[]=$res;
+        }
+        return $this->ro;
+    }
+
     public function navrol($rol)
+    // muestra el menu segun el rol del uauario que inicie sesion
     {
         if($_SESSION['rol']=='ADMIN')
       {
@@ -1047,6 +1183,93 @@ class comparendo extends Conexion
             </script>";
             }
             
+    }
+}
+class alerts extends Conexion
+{
+    private $alerts=array();
+    private $alert=array();
+    private $aler=array();
+    
+    public function querydiasvence()
+    //consulta los dias que restan para el vencimiento de SOAT, tecnocomecanica y poliza contraactual
+    {
+        $fecha=date('Y-m-d');
+        $sql="SELECT vehiculo.VenceSoat, vehiculo.VencePolizaContraactual, vehiculo.VenceTecnicomecanica, vehiculo.Placa, 
+        DATEDIFF('$fecha',vehiculo.VenceSoat ) as dias_SOAT, 
+        DATEDIFF('$fecha',vehiculo.VencePolizaContraactual ) as dias_extracontractual,
+        DATEDIFF('$fecha',vehiculo.VenceTecnicomecanica ) as dias_tenicomecanica
+        FROM vehiculo";
+        
+        $rest=$this->conex->prepare($sql);
+        $rest->execute(array());
+        while($res=$rest->fetch(PDO::FETCH_ASSOC))
+        {
+            $this->alerts[]=$res;
+        }
+        return $this->alerts;
+    }
+    public function alertasVencimientosVehiculo()
+    //envia correos y alertas a las usuarios administrativos del vecimiento de SOAT, Tecnicomecanica y poliza extracontractual
+    {
+        
+        $alerta=new alerts;
+        $use= new user;
+        $aler=$alerta->querydiasvence(date('Y-m-d'));
+        $users=$use->queryalluser();
+               foreach($aler as $alert)
+        {
+            if($alert['dias_SOAT']>=0)
+            {
+                echo "<script type='text/javascript'>
+                alert('Atencion!!! el SOAT del vehiculo $alert[Placa] a vencido, por favor renovar y actualizar los datos en el sistema');
+                </script>";
+            }
+            if($alert['dias_extracontractual']>=0)
+            {
+                echo "<script type='text/javascript'>
+                alert('Atencion!!! la poliza extracontractual del vehiculo $alert[Placa] a vencido, por favor renovar y actualizar los datos en el sistema');
+                </script>";
+            }
+            if($alert['dias_tenicomecanica']>=0)
+            {
+                echo "<script type='text/javascript'>
+                alert('Atencion!!! la Revision tecnicomecanica del vehiculo $alert[Placa] a vencido, por favor renovar y actualizar los datos en el sistema');
+                </script>";
+            }
+        }
+
+    }
+    public function sendmailnotification()
+    //envia correos y alertas a las usuarios administrativos del vecimiento de SOAT, Tecnicomecanica y poliza extracontractual
+    {
+        
+        $alerta=new alerts;
+        $use= new user;
+        $aler=$alerta->querydiasvence(date('Y-m-d'));
+        $users=$use->queryalluser();
+               foreach($aler as $alert)
+        {
+            if($alert['dias_SOAT']>=0)
+            {
+
+                mail('nelsonaldevaran@gmail.com','Atencion!!!!! Vencio el SOAT del vehiculo '.$alert['Placa'],' El Soat del vehiculo'.$alert['Placa'].' vencio el '.$alert['VenceSoat'].
+                'por favor renovarlo y actualizar la informacion en el sistema');
+            }
+            if($alert['dias_extracontractual']>=0)
+            {
+
+                mail('nelsonaldevaran@gmail.com','Atencion!!!!! Vencio La poliza contractual del vehiculo '.$alert['Placa'],' La poliza del vehiculo'.$alert['Placa'].' vencio el '.$alert['VencePolizaContraactual'].
+                'por favor renovarlo y actualizar la informacion en el sistema');
+            }
+            if($alert['dias_tenicomecanica']>=0)
+            {
+
+                 mail('nelsonaldevaran@gmail.com','Atencion!!!!! Vencio La revision tecnicomecanica del vehiculo '.$alert['Placa'],' La poliza del vehiculo'.$alert['Placa'].' vencio el '.$alert['VenceTecnicomecanica'].
+                'por favor renovarlo y actualizar la informacion en el sistema');
+            }
+        }
+
     }
 }
 ?>
