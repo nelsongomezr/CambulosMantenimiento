@@ -16,7 +16,6 @@ $querycond= new  user;
 if(!$_GET==0 or($_GET==""))
 {
   $Quercond=$querycond->queryuser($_GET['id']);
-  print_r($Quercond);
   $id=$Quercond[0]['idUsuario'];
 }else
 {

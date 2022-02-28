@@ -10,6 +10,7 @@ if($_SESSION==null || $_SESSION=="")
 }
 require("class/class.php");
 $us=$_GET['id'];
+$_SESSION['varid']=$us;
 $user= new user;
 $nav=new rol;
 $veh=$nav->queryAllRol();

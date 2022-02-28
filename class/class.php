@@ -61,7 +61,6 @@ class login extends Conexion
             
 
         }
-        
     }
 }
 class conductor extends Conexion
@@ -105,7 +104,7 @@ class conductor extends Conexion
     }
     public function InsertCondut($inf)
     {
-       $quercond= new conductor;
+        $quercond= new conductor;
         $formato[]=('.pdf');
 
         if(isset($_FILES['filelicencia']))
@@ -121,7 +120,7 @@ class conductor extends Conexion
             }else{
                     echo "<script type='text/javascript'>
                     alert('ERROR El archivo de licencia que esta cargando debe ser PDF');
-                    window.location='../CambulosMantenimiento/crudconductor.php';
+                    window.location='crudconductor.php';
                     </script>";
             }
         $ruta="documentos/licencia/".' '.$inf[0]['idcond'].' '.$inf[0]['nom'].' '.$inf[0]['ape'].'.pdf';
@@ -140,7 +139,7 @@ class conductor extends Conexion
             }else{
                     echo "<script type='text/javascript'>
                     alert('ERROR El archivo de formato autorizacion descuento que esta cargando debe ser PDF');
-                    window.location='../CambulosMantenimiento/crudconductor.php';
+                    window.location='crudconductor.php';
                     </script>";
             }
         $filedescu="documentos/conductor/FormatoAutorizacionDescuento/".' '.$inf[0]['idcond'].' '.$inf[0]['nom'].' '.$inf[0]['ape'].'.pdf';
@@ -159,7 +158,7 @@ class conductor extends Conexion
             }else{
                     echo "<script type='text/javascript'>
                     alert('ERROR El archivo de formato de apertura de caja menor que esta cargando debe ser PDF');
-                    window.location='../CambulosMantenimiento/crudconductor.php';
+                    window.location='crudconductor.php';
                     </script>";
             }
         $filecaja="documentos/conductor/FormatoAperturaCajaMenor/".' '.$inf[0]['idcond'].' '.$inf[0]['nom'].' '.$inf[0]['ape'].'.pdf';
@@ -178,7 +177,7 @@ class conductor extends Conexion
             }else{
                     echo "<script type='text/javascript'>
                     alert('ERROR El archivo de formato responsivo equipo movil que esta cargando debe ser PDF');
-                    window.location='../CambulosMantenimiento/crudconductor.php';
+                    window.location='crudconductor.php';
                     </script>";
             }
             $filemovil="documentos/conductor/FormatoResponsivoEquipoMovil/".' '.$inf[0]['idcond'].' '.$inf[0]['nom'].' '.$inf[0]['ape'].'.pdf';
@@ -202,7 +201,7 @@ class conductor extends Conexion
             {
                 echo "<script type='text/javascript'>
                 alert('Debe diligenciar todos los campos');
-                window.location='../CambulosMantenimiento/crudconductor.php';
+                window.location='crudconductor.php';
                 </script>";
 
             }else
@@ -214,7 +213,7 @@ class conductor extends Conexion
                  'tcon'=>$tcon, 'aexp'=>$aexp, 'daterunt'=>$daterunt, 'pass'=>$pass, 'filedescu'=>$filedescu, 'filecaja'=>$filecaja, 'filemovil'=>$filemovil));
                 echo "<script type='text/javascript'>
                 alert('Registro realizado exitosamente');
-                window.location='../CambulosMantenimiento/crudconductor.php';
+                window.location='crudconductor.php';
                 </script>";
             }
     }
@@ -318,7 +317,7 @@ class conductor extends Conexion
         {
             echo "<script type='text/javascript'>
             alert('Debe diligenciar todos los campos');
-            window.location='../CambulosMantenimiento/conductorquery.php';
+            window.location='conductorquery.php';
             </script>";
         }else
         {
@@ -351,20 +350,21 @@ class conductor extends Conexion
             $_SESSION['varid']=$Quercond[0]['idConductor'];
             echo "<script type='text/javascript'> 
             alert('Informacion actualizada correctamente.');
-            window.location='../CambulosMantenimiento/infoconductor.php ';
+            window.location='infoconductor.php ';
             </script>";
         }
         
     }
     public function deleteconductor($id)
     {
-        
+        $validar=new prueba;
+        $val=$validar->caracteres($id);
         $sql="CALL conductordelete(:id)";
         $rest=$this->conex->prepare($sql);
         $rest->execute(array('id'=>$id));
         echo "<script type='text/javascript'>
                 alert('Registro eliminado exitosamente');
-                window.location='../CambulosMantenimiento/conductorquery.php';
+                window.location='conductorquery.php';
                 </script>";
     }
     public function old($fn)
@@ -389,7 +389,6 @@ class Vehiculo extends Conexion
 
     public function insertvehiculo($info)
     {
-
         $formato[]=('.pdf');
 
         if(isset($_FILES['filesoat']))
@@ -592,12 +591,12 @@ class Vehiculo extends Conexion
         $rest->execute(array('plac'=>$plac));
         echo "<script type='text/javascript'>
                 alert('Registro eliminado exitosamente');
-                window.location='../CambulosMantenimiento/vehiculoquery.php';
+                window.location='vehiculoquery.php';
                 </script>";
     }
     public function updatevehiculo ($update)
     {
-    
+
         $formato[]=('.pdf');
 
         if(isset($_FILES['filesoat']))
@@ -750,6 +749,7 @@ class Vehiculo extends Conexion
     }
     public function queryvehiculoid($id)
     {
+
         $sql="SELECT * FROM `vehiculo` WHERE vehiculo.idVehiculo=:id AND vehiculo.Estado=1";
         $rest=$this->conex->prepare($sql);
         $rest->execute(array('id'=>$id));
@@ -793,6 +793,8 @@ class user extends Conexion
     public function quereyusername($nom)
     // realiza consulta de usuarios por nombre o apellido
     {
+        $validar=new prueba;
+        $val=$validar->caracteres($nom);
         if($nom=="")
         {
             echo "<script type='text/javascript'>
@@ -827,7 +829,8 @@ class user extends Conexion
     public function insertuser($inf)
     //realiza el registro de usuarios
     {
-        print_r($inf);
+        $validar=new prueba;
+        $val=$validar->caracteres($inf);
         if($inf[0]['idcond']=="" or($inf[0]['nom'])=="" or($inf[0]['ape'])=="" or($inf[0]['email'])=="" or($inf[0]['tel'])=="" or($inf[0]['rol'])=="")
         {
             echo "<script type='text/javascript'>
@@ -838,37 +841,42 @@ class user extends Conexion
         {
             $inf[0]['idcond'];
             $pass=crypt(10,$inf[0]['idcond']);
-            $sql="INSERT INTO usuario VALUES(:id,:nom,:ap,:email,:tel,:rol,:pass)";
+            $sql="INSERT INTO usuario VALUES(:id,:nom,:ap,:email,:tel,:rol,:pass,1)";
             $rest=$this->conex->prepare($sql);
             $rest->execute(array('id'=>$inf[0]['idcond'],'nom'=>$inf[0]['nom'],'ap'=>$inf[0]['ape'],'email'=>$inf[0]['email'],
             'tel'=>$inf[0]['tel'],'rol'=>$inf[0]['rol'], 'pass'=>$pass));
             echo "<script type='text/javascript'>
-            alert('debe diligenciar todos los campos');
+            alert('usuario registrado exitosamente  ');
+            window.location='userquery.php';
             </script>";
         }
         
     }
     public function updateuser($inf)
     //actualiza la informacion del usuario
-    {
-        print_r($inf);
-        
-
-        if($inf['idcond']=="" or($inf['nom'])=="" or($inf['ape'])=="" or($inf['tel'])=="" or($inf['email'])=="" or($inf['rol'])=="")
+    {   
+        $validar=new prueba;
+        $val=$validar->caracteres($inf);
+        $id=$inf['idcond'];
+        $nom=$inf['nom'];
+        $ape=$inf['ape'];
+        $tel=$inf['tel'];
+        $email=$inf['email'];
+        $rol=$inf['rol'];
+        if($id=="" or($nom)=="" or($ape)=="" or($tel)=="" or($email)=="" or($rol==""))
         {
-
-            echo "<script type='text/javascript'>
+            
+           /*echo "<script type='text/javascript'>
                     alert('debe diligenciar todos los campos');
-                   
-                    </script>";
+                    window.location='userquery.php';
+                    </script>";*/
 
         }else
         {
-            $inf['idcond'];
-            $pass=crypt(10,$inf['idcond']);
             $sql="UPDATE usuario SET usuario.idUsuario=:id, usuario.Nombre=:nom, usuario.Apellido=:ap,usuario.Email=:email, usuario.Telefono=:tel, usuario.Rol_idRol=:rol WHERE usuario.idUsuario=:id";
             $rest=$this->conex->prepare($sql);
-            $rest->execute(array('id'=>$inf['idcond'],'nom'=>$inf['nom'],'ap'=>$inf['ape'],'email'=>$inf['email'],'tel'=>$inf['tel'],'rol'=>$inf['rol'], 'pass'=>$pass));
+            $rest->execute(array('id'=>$id, 'nom'=>$nom, 'ap'=>$ape, 'email'=>$email, 'tel'=>$tel, 'rol'=>$rol));
+            
             $_SESSION['varid']=$inf['idcond'];
             echo "<script type='text/javascript'>
             alert('Informacion actualizada correctamente');
@@ -879,6 +887,8 @@ class user extends Conexion
     }
     public function deleteuser($id)
     {
+        $validar=new prueba;
+        $val=$validar->caracteres($id);
         $sql="UPDATE usuario SET usuario.Estado=0 WHERE usuario.idUsuario=:id";
         $rest=$this->conex->prepare($sql);
         $rest->execute(array('id'=>$id));
@@ -904,7 +914,9 @@ class Rol extends Conexion
         return $this->rol;
     }
     public function queryUserId($id)
-    {
+    {   
+        $validar=new prueba;
+        $val=$validar->caracteres($id);
         $sql="SELECT * FROM usuario WHERE usuario.idUsuario=:id";
         $rest=$this->conex->prepare($sql);
         $rest->execute(array('id'=>$id));
@@ -969,7 +981,7 @@ class comparendo extends Conexion
         {
             echo "<script type='text/javascript'>
             alert('Debe diligenciar todos los campos');
-            window.location='../CambulosMantenimiento/reportecomparendos.php';
+            window.location='reportecomparendos.php';
             </script>";
         }else
         {
@@ -1035,6 +1047,7 @@ class comparendo extends Conexion
     public function querycomparvehicle($id)
      // consulta comparendos por placa de vehiculo
     {
+
         $sql="SELECT * FROM comparendos 
         INNER JOIN Vehiculo
         ON comparendos.Vehiculo_IdVehiculoo=vehiculo.idVehiculo
@@ -1066,7 +1079,6 @@ class comparendo extends Conexion
     /* incluye en una sola funcion las funciones querycomparconddriver y  querycomparconddriver para automatizar 
     el uso de cada una, dependiendo del id que se ingrese para la consulta (conductor o vehiculo)*/
     {  
-         
         $finds= new comparendo;
         $fin=$finds->querycomparvehicle($id);
 
@@ -1092,7 +1104,6 @@ class comparendo extends Conexion
         return $simit;
     }
     public function updatecomparendo($compup)
-
     //realiza update de los datos del comparendo en la base
     {
         $NroComp=$compup['NroComp'];
@@ -1148,10 +1159,10 @@ class comparendo extends Conexion
             $rest=$this->conex->prepare($sql);
             $rest->execute(array('ncomp'=>$NroComp, 'tcomp'=>$TComp, 'fcomp'=>$Fcomp, 'scomp'=>$sec, 'infcomp'=>$infrac, 'ecomp'=>$est, 'vcomp'=>$val, 'vpcomp'=>$valapa, 'id'=>$id));
             $_SESSION['comparendo']=$NroComp;
-            echo "<script type='text/javascript'>
+            /*echo "<script type='text/javascript'>
             alert('Comparendo actualizado correctamente');
             window.location='comparendoupdate.php';
-            </script>";
+            </script>";*/   
         }    
     }
     public function deletecomparendo($del)
@@ -1211,8 +1222,7 @@ class alerts extends Conexion
     }
     public function alertasVencimientosVehiculo()
     //envia correos y alertas a las usuarios administrativos del vecimiento de SOAT, Tecnicomecanica y poliza extracontractual
-    {
-        
+    { 
         $alerta=new alerts;
         $use= new user;
         $aler=$alerta->querydiasvence(date('Y-m-d'));
@@ -1271,5 +1281,18 @@ class alerts extends Conexion
         }
 
     }
+}
+class valida
+{
+    public function caracteres($str)
+    // valida que los datos ingresados no contengan caracteres especiales
+    {
+
+        $res = preg_replace('/[*\;\<\>\*\#\=\'\""]+/', '', $str);
+        echo "<script type='text/javascript'>
+        alert('Solo Alfanumerico');
+        </script>";
+        return $res;
+    }   
 }
 ?>

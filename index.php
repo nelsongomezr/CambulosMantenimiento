@@ -5,6 +5,8 @@
     if(isset($_POST['login']))
     {
         $info[]=$_POST;
+        $valida=new valida;
+        $char=$valida->caracteres($_POST);
         $lo=$logi->log($info);
     }
 ?>
