@@ -8,6 +8,7 @@ if($_SESSION==null || $_SESSION=="")
     </script>";
     die();
 }
+print_r($_GET['id']);
 require('class/class.php');
 $delete= new comparendo;
 $delet=$delete->deletecomparendo($_GET['id']);

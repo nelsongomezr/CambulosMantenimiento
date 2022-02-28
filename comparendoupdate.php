@@ -112,7 +112,10 @@
 
     if(isset($_POST['update']))
     {
-    $com=$comp->updatecomparendo($_POST);
+        print_r($_POST);
+        $valida=new valida;
+        $char=$valida->caracteres($_POST);
+        $com=$comp->updatecomparendo($_POST);
     }
 
     ?>
