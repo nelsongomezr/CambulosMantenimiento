@@ -1,4 +1,5 @@
 <?php
+print_r($_GET);
   session_start();
   if($_SESSION==null || $_SESSION=="")
 {

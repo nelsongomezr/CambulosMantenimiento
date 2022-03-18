@@ -69,6 +69,8 @@ class conductor extends Conexion
     private $querycon=array();
     private $queryco=array();
     private $queryc=array();
+    private $contrato=array();
+    private $categorialicencia=array();
     public function queryconductorname($nom)
     {
         $sql="call conductorqueryname(:nom)";
@@ -220,7 +222,6 @@ class conductor extends Conexion
     public function updateconductor($updatec)
     {
         $formato[]=('.pdf');
-
         if (isset($_FILES['cargue']))
         {
             $namefile= $_FILES['cargue']['name'];
@@ -235,7 +236,7 @@ class conductor extends Conexion
             {
                 /*echo "<script type='text/javascript'>
                     alert('ERROR El archivo de licencia de conduccion que esta cargando debe ser PDF');
-                    window.location='../CambulosMantenimiento/crudconductor.php';
+                    window.location='crudconductor.php';
                     </script>";*/
             }
             $ruta="documentos/licencia/".' '.$updatec['id'].' '.$updatec['nom'].' '.$updatec['ap'].'.pdf';   
@@ -296,7 +297,6 @@ class conductor extends Conexion
                     </script>";*/
             }
             $filemovil="documentos/conductor/FormatoResponsivoEquipoMovil/".' '.$updatec['id'].' '.$updatec['nom'].' '.$updatec['ap'].'.pdf';
-            echo $filemovil;
         }
             
           
@@ -348,17 +348,15 @@ class conductor extends Conexion
             'flicen'=>$flicen, 'files'=>$ruta, 'idveh'=>$idveh, 'rol'=>$rol, 'ed'=>$ed, 'tcon'=>$tcon, 'expe'=>$aexp, 'frunt'=>$frunt,
             'ArchAutoDescuento'=>$filedescu,'ArchAperturaCaja'=>$filecaja,'ArchEquipoMovil'=>$filemovil ));
             $_SESSION['varid']=$Quercond[0]['idConductor'];
-            echo "<script type='text/javascript'> 
+            /*echo "<script type='text/javascript'> 
             alert('Informacion actualizada correctamente.');
             window.location='infoconductor.php ';
-            </script>";
+            </script>*/
         }
         
     }
     public function deleteconductor($id)
     {
-        $validar=new prueba;
-        $val=$validar->caracteres($id);
         $sql="CALL conductordelete(:id)";
         $rest=$this->conex->prepare($sql);
         $rest->execute(array('id'=>$id));
@@ -379,6 +377,28 @@ class conductor extends Conexion
             }
         return $this->queryc;
     }
+    public function querycontrato()
+    {
+        $sql="SELECT * FROM contratolaboral ";
+        $rest=$this->conex->prepare($sql);
+        $rest->execute(array());
+        while($res=$rest->fetch(PDO::FETCH_ASSOC))
+        {
+            $this->contrato[]=$res;
+        }
+        return $this->contrato;
+    }
+    public function querycategorialicencia()
+    {
+        $sql="SELECT * FROM tipolicencia";
+        $rest=$this->conex->prepare($sql);
+        $rest->execute(array());
+        while($res=$rest->fetch(PDO::FETCH_ASSOC))
+        {
+            $this->categorialicencia[]=$res;
+        }
+        return $this->categorialicencia;
+    }
     
 }
 class Vehiculo extends Conexion
@@ -386,7 +406,26 @@ class Vehiculo extends Conexion
     private $queryvehi=array();
     private $querveh=array();
     private $queve=array();
+    private $quev=array();
+    private $que=array();
+    private $servicio=array();
+    private $q=array();
+    private $clase=array();
+    private $carroceria=array();
+    private $direccion=array();
+    private $combustible=array();
+    private $llanta=array();
 
+    public function aniomodelo()
+    {
+        $year=date('Y');
+        for($i=0;$i=5;$i++)
+        {
+            $cont = date('Y');
+
+        }
+        return $this->quev;
+    }
     public function insertvehiculo($info)
     {
         $formato[]=('.pdf');
@@ -521,8 +560,8 @@ class Vehiculo extends Conexion
             </script>";
         }else
         {
-            $sql="INSERT INTO vehiculo VALUES(NULL,:pla,:mar,:lin,:model,:col,:cil,:ser,:cla,:car,
-            :conb,:ccarg,:pesb,:nejes,:nllan,:dllan,:tdir,:ltotal,:alt,:anch,:entreeje,:nmot,:ncha,:nvim,
+            $sql="INSERT INTO vehiculo VALUES(NULL,:pla,:mar,:lin,:model,:col,:cil,:cla,:car,
+            :conb,:ccarg,:pesb,:ser,:nejes,:nllan,:dllan,:tdir,:ltotal,:alt,:anch,:entreeje,:nmot,:ncha,:nvim,
             :vsoat,:psoat,:arcsoat,:ntec,:vtec,:arctec,:nlic,:fmatr,:archlic,:uvehi,:pcontra,:vcontra,:arccontra,1)";
             $rest=$this->conex->prepare($sql);
             $rest->execute(array('pla'=>$pla,'mar'=>$mar,'lin'=>$lin,'model'=>$mod,'col'=>$col,'cil'=>$cil,'ser'=>$ser,'cla'=>$cla,'car'=>$car,'conb'=>$comb,'ccarg'=>$carga,
@@ -557,9 +596,28 @@ class Vehiculo extends Conexion
             </script>";
         }else
         {
+            $nomb= '%'.$pla.'%';
             $sql="SELECT * FROM `vehiculo`
+            INNER JOIN Linea
+            ON vehiculo.Linea=Linea.IdLinea
             INNER JOIN usovheiculo
             ON vehiculo.UsoVheiculo_IdUso=usovheiculo.IdUso
+            INNER JOIN marca
+			ON  vehiculo.Marca_Idmarca=marca.idMarca
+            INNER JOIN color
+            ON vehiculo.Color_IdColor=color.Id_Color
+            INNER JOIN clasevehiculo
+            ON vehiculo.Clase_IdClase=clasevehiculo.IdClase
+            INNER JOIN tipocarroceria
+            ON vehiculo.Carroceria_TipoCarroceria=tipocarroceria.idTipoCarroceria
+            INNER JOIN tipocombustible
+            ON vehiculo.Combustible_Idcombustible=tipocombustible.IdTipoCombustible
+            INNER JOIN servicio
+            ON vehiculo.Servicio_IdServicio=servicio.IdServicio
+            INNER JOIN llanta
+            ON vehiculo.Llanta_idLlanta=llanta.idLlanta
+            INNER JOIN direccion
+            ON vehiculo.TipoDireccion=direccion.IdDireccion
             WHERE vehiculo.Placa=:pla AND vehiculo.Estado=1";
             $rest=$this->conex->prepare($sql);
             $rest->execute(array('pla'=>$pla));
@@ -573,8 +631,26 @@ class Vehiculo extends Conexion
     public function queryvehiculoplacaupdate($pla)
     {
             $sql="SELECT * FROM `vehiculo`
+            INNER JOIN Linea
+            ON vehiculo.Linea=Linea.IdLinea
             INNER JOIN usovheiculo
             ON vehiculo.UsoVheiculo_IdUso=usovheiculo.IdUso
+            INNER JOIN marca
+			ON  vehiculo.Marca_Idmarca=marca.idMarca
+            INNER JOIN color
+            ON vehiculo.Color_IdColor=color.Id_Color
+            INNER JOIN clasevehiculo
+            ON vehiculo.Clase_IdClase=clasevehiculo.IdClase
+            INNER JOIN tipocarroceria
+            ON vehiculo.Carroceria_TipoCarroceria=tipocarroceria.idTipoCarroceria
+            INNER JOIN tipocombustible
+            ON vehiculo.Combustible_Idcombustible=tipocombustible.IdTipoCombustible
+            INNER JOIN servicio
+            ON vehiculo.Servicio_IdServicio=servicio.IdServicio
+            INNER JOIN llanta
+            ON vehiculo.Llanta_idLlanta=llanta.idLlanta
+            INNER JOIN direccion
+            ON vehiculo.TipoDireccion=direccion.IdDireccion
             WHERE vehiculo.Placa=:pla AND vehiculo.Estado=1";
             $rest=$this->conex->prepare($sql);
             $rest->execute(array('pla'=>$pla));
@@ -715,17 +791,17 @@ class Vehiculo extends Conexion
         or($dimllantas=="") or($nsoat=="") or($fsoat=="") or($filesoat=="") or($nrotecnico=="") or($ftecnico=="") or($filetecnico=="")or($ncontra=="") or($fcontra=="")
         or($filecontra=="") or($nlicen=="") or($fmatri=="") or($filematric=="") )
         {
-            echo "<script type='text/javascript'>
+            /*echo "<script type='text/javascript'>
             alert('Debe diligenciar todos los campos');
             window.location='vehiculoquery.php';
-            </script>";
+            </script>";*/
         }else
         {
             $sql="UPDATE vehiculo SET vehiculo.Placa=:pla,
-            vehiculo.Marca=:mar,vehiculo.Linea=:lin,vehiculo.modelo=:model,vehiculo.Color=:col,vehiculo.Cilindraje=:cil,
-            vehiculo.Servicio=:ser,vehiculo.ClaseVehiculo=:cla,vehiculo.TipoCarroceria=:car,vehiculo.Combustible=:conb,
+            vehiculo.Marca_Idmarca=:mar,vehiculo.Linea=:lin,vehiculo.modelo=:model,vehiculo.Color_IdColor=:col,vehiculo.Cilindraje=:cil,
+            vehiculo.Servicio_IdServicio=:ser,vehiculo.Clase_IdClase=:cla,vehiculo.Carroceria_TipoCarroceria=:car,vehiculo.Combustible_Idcombustible=:conb,
             vehiculo.CapacidadCarga=:ccarg,vehiculo.PesoBruto=:pesb,vehiculo.NoEjes=:nejes,vehiculo.NoLlantas=:nllan,
-            vehiculo.DimensionLLanta=:dllan,vehiculo.TipoDireccion=:tdir,vehiculo.LongitudTotal=:ltotal,
+            vehiculo.Llanta_idLlanta=:dllan,vehiculo.TipoDireccion=:tdir,vehiculo.LongitudTotal=:ltotal,
             vehiculo.Alto=:alt,vehiculo.Ancho=:anch,vehiculo.DistaEntreEjes=:entreeje,vehiculo.NumeroMotor=:nmot,
             vehiculo.NoChasis=:ncha,vehiculo.NoVim=:nvim,vehiculo.VenceSoat=:vsoat,vehiculo.PolizaSoat=:psoat,
             vehiculo.ArchSoat=:arcsoat,vehiculo.NoTecnicomecanica=:ntec,vehiculo.VenceTecnicomecanica=:vtec,
@@ -736,14 +812,13 @@ class Vehiculo extends Conexion
 
             $rest=$this->conex->prepare($sql);
             $rest->execute(array('pla'=>$pla,'mar'=>$mar,'lin'=>$lin,'model'=>$mod,'col'=>$col,'cil'=>$cil,'ser'=>$ser,'cla'=>$cla,'car'=>$car,'conb'=>$comb,'ccarg'=>$carga,
-            'pesb'=>$pbruto,'nejes'=>$nejes,'nllan'=>$nllantas,'dllan'=>$dimllantas,'tdir'=>$tdir,'ltotal'=>$ltotal,'alt'=>$alto,'anch'=>$ancho,'entreeje'=>$dejes,'nmot'=>$nmot,
-            'ncha'=>$nchasis,'nvim'=>$VIM,'vsoat'=>$fsoat,'psoat'=>$nsoat,'arcsoat'=>$filesoat,'ntec'=>$nrotecnico,'vtec'=>$ftecnico,'arctec'=>$filetecnico,'nlic'=>$nlicen,
-            'fmatr'=>$fmatri,'archlic'=>$filematric,'uvehi'=>$act,'pcontra'=>$ncontra,'vcontra'=>$fcontra,'arccontra'=>$filecontra));
+            'pesb'=>$pbruto,'nejes'=>$nejes,'nllan'=>$nllantas,'dllan'=>$dimllantas,'tdir'=>$tdir,'ltotal'=>$ltotal,'alt'=>$alto,'anch'=>$ancho,'entreeje'=>$dejes,'nmot'=>$nmot,'ncha'=>$nchasis,'nvim'=>$VIM,'vsoat'=>$fsoat,'psoat'=>$nsoat,'arcsoat'=>$filesoat,'ntec'=>$nrotecnico,'vtec'=>$ftecnico,'arctec'=>$filetecnico,'nlic'=>$nlicen,'fmatr'=>$fmatri,'archlic'=>$filematric,'uvehi'=>$act,'pcontra'=>$ncontra,'vcontra'=>$fcontra,'arccontra'=>$filecontra));
+
             $_SESSION['placa']=$update['placa'];
-            echo "<script type='text/javascript'>
+            /*echo "<script type='text/javascript'>
             alert('Informacion del vehiculo a sido actualizada exitosamente');
             window.location='vehiculoupdate.php';
-            </script>";
+            </script>";*/
         
         }
     }
@@ -758,6 +833,117 @@ class Vehiculo extends Conexion
             $this->queve[]=$res;
         }
         return $this->queve;
+    }
+    public function querymarca()
+    // realiza consulta de las marcas de vehiculo
+    {
+        $sql="SELECT * FROM marca ORDER BY marca.NombreMarca ASC";
+        $rest=$this->conex->prepare($sql);
+        $rest->execute(array());
+        while($res=$rest->fetch(PDO::FETCH_ASSOC))
+        {
+            $this->que[]=$res;
+        }
+        return $this->que;
+    }
+    public function querlinea($id)
+    // realiza consulta de las lineas registradas por marca de vehiculo
+    {
+        $sql="SELECT * FROM linea WHERE linea.Marca_IdMarca=2 ORDER BY linea.Linea asc";
+        $rest=$this->conex->prepare($sql);
+        $rest->execute(array());
+        while($res=$rest->fetch(PDO::FETCH_ASSOC))
+        {
+            $this->que[]=$res;
+        }
+        return $this->que;
+    }
+    public function querycolor()
+    // realiza consulta colores registrados
+    {
+        $sql="SELECT Color.Id_Color, Color.Color FROM color ORDER by Color.Color asc";
+        $rest=$this->conex->prepare($sql);
+        $rest->execute(array());
+        while($res=$rest->fetch(PDO::FETCH_ASSOC))
+        {
+            $this->q[]=$res;
+        }
+        return $this->q;
+    }
+
+    public function queryservicio()
+    // realiza consulta de las lineas registradas por marca de vehiculo
+    {
+        $sql="SELECT servicio.IdServicio, servicio.Servicio FROM servicio ORDER by servicio.Servicio asc";
+        $rest=$this->conex->prepare($sql);
+        $rest->execute(array());
+        while($res=$rest->fetch(PDO::FETCH_ASSOC))
+        {
+            $this->servicio[]=$res;
+        }
+        return $this->servicio;
+    }
+    public function queryclase()
+    // consulta las clases de vehiculo registradas en la tabla clase vehiculo
+    {
+        $sql="SELECT clasevehiculo.IdClase, clasevehiculo.ClaseVehiculo FROM clasevehiculo ORDER BY clasevehiculo.ClaseVehiculo ASC";
+        $rest=$this->conex->prepare($sql);
+        $rest->execute(array());
+        while($res=$rest->fetch(PDO::FETCH_ASSOC))
+        {
+            $this->clase[]=$res;
+        }
+        return $this->clase;
+    }
+    public function querycarroceria()
+    // consulta las clases de vehiculo registradas en la tabla clase vehiculo
+    {
+        $sql="SELECT tipocarroceria.idTipoCarroceria, tipocarroceria.TipoCarroceria FROM tipocarroceria ORDER BY tipocarroceria.TipoCarroceria asc";
+        $rest=$this->conex->prepare($sql);
+        $rest->execute(array());
+        while($res=$rest->fetch(PDO::FETCH_ASSOC))
+        {
+            $this->carroceria[]=$res;
+        }
+        return $this->carroceria;
+    }
+    public function querydireccion()
+    // consulta los tipos de direccion de vehiculo registradas en la tabla direccion
+    {
+        $sql="SELECT direccion.IdDireccion, direccion.tipiDireccion FROM direccion ORDER BY direccion.tipiDireccion asc";
+        $rest=$this->conex->prepare($sql);
+        $rest->execute(array());
+        while($res=$rest->fetch(PDO::FETCH_ASSOC))
+        {
+            $this->direccion[]=$res;
+        }
+        return $this->direccion;
+    }
+
+    public function querycombustible()
+    // consulta los tipos de combustible de vehiculo registradas en la tabla tipo combustible
+    {
+        $sql="SELECT tipocombustible.IdTipoCombustible, tipocombustible.Combustuble FROM tipocombustible ORDER BY tipocombustible.Combustuble ASC";
+        $rest=$this->conex->prepare($sql);
+        $rest->execute(array());
+        while($res=$rest->fetch(PDO::FETCH_ASSOC))
+        {
+            $this->combustible[]=$res;
+        }
+        return $this->combustible;
+    }
+
+    public function queryllanta()
+    // consulta los modelos de llanta de vehiculo registradas en la tabla llanta
+    {
+        $sql="SELECT llanta.idLlanta, llanta.Dimenciones FROM llanta ORDER BY llanta.Dimenciones ASC";
+        $rest=$this->conex->prepare($sql);
+        $rest->execute(array());
+        while($res=$rest->fetch(PDO::FETCH_ASSOC))
+        {
+            $this->llanta[]=$res;
+        }
+        return $this->llanta;
     }
 }
 class user extends Conexion
@@ -793,8 +979,6 @@ class user extends Conexion
     public function quereyusername($nom)
     // realiza consulta de usuarios por nombre o apellido
     {
-        $validar=new prueba;
-        $val=$validar->caracteres($nom);
         if($nom=="")
         {
             echo "<script type='text/javascript'>
@@ -803,7 +987,7 @@ class user extends Conexion
                     </script>";
         }else
         {
-            $nomb= $nom.'%';
+            $nomb= '%'.$nom.'%';
             $sql="SELECT * FROM `usuario` WHERE usuario.Estado=1 AND usuario.Nombre LIKE :nom OR usuario.Apellido LIKE :nom ORDER by usuario.Nombre ASC";
             $rest=$this->conex->prepare($sql);
             $rest->execute(array('nom'=>$nomb));
@@ -829,8 +1013,7 @@ class user extends Conexion
     public function insertuser($inf)
     //realiza el registro de usuarios
     {
-        $validar=new prueba;
-        $val=$validar->caracteres($inf);
+
         if($inf[0]['idcond']=="" or($inf[0]['nom'])=="" or($inf[0]['ape'])=="" or($inf[0]['email'])=="" or($inf[0]['tel'])=="" or($inf[0]['rol'])=="")
         {
             echo "<script type='text/javascript'>
@@ -855,8 +1038,6 @@ class user extends Conexion
     public function updateuser($inf)
     //actualiza la informacion del usuario
     {   
-        $validar=new prueba;
-        $val=$validar->caracteres($inf);
         $id=$inf['idcond'];
         $nom=$inf['nom'];
         $ape=$inf['ape'];
@@ -887,8 +1068,7 @@ class user extends Conexion
     }
     public function deleteuser($id)
     {
-        $validar=new prueba;
-        $val=$validar->caracteres($id);
+        print_r($id);
         $sql="UPDATE usuario SET usuario.Estado=0 WHERE usuario.idUsuario=:id";
         $rest=$this->conex->prepare($sql);
         $rest->execute(array('id'=>$id));
@@ -915,8 +1095,6 @@ class Rol extends Conexion
     }
     public function queryUserId($id)
     {   
-        $validar=new prueba;
-        $val=$validar->caracteres($id);
         $sql="SELECT * FROM usuario WHERE usuario.idUsuario=:id";
         $rest=$this->conex->prepare($sql);
         $rest->execute(array('id'=>$id));
@@ -1262,24 +1440,80 @@ class alerts extends Conexion
         {
             if($alert['dias_SOAT']>=0)
             {
-
-                mail('nelsonaldevaran@gmail.com','Atencion!!!!! Vencio el SOAT del vehiculo '.$alert['Placa'],' El Soat del vehiculo'.$alert['Placa'].' vencio el '.$alert['VenceSoat'].
-                'por favor renovarlo y actualizar la informacion en el sistema');
+                $email=new user;
+                $mail=$email->queryalluser();
+                foreach($mail as $res)
+                {
+                    
+                    mail($res['Email'],'Atencion!!!!! Vencio el SOAT del vehiculo '.$alert['Placa'],' El Soat del vehiculo'.$alert['Placa'].' vencio el '.$alert['VenceSoat'].
+                    'por favor renovarlo y actualizar la informacion en el sistema');
+                }
+                
             }
             if($alert['dias_extracontractual']>=0)
             {
 
-                mail('nelsonaldevaran@gmail.com','Atencion!!!!! Vencio La poliza contractual del vehiculo '.$alert['Placa'],' La poliza del vehiculo'.$alert['Placa'].' vencio el '.$alert['VencePolizaContraactual'].
-                'por favor renovarlo y actualizar la informacion en el sistema');
+                $email=new user;
+                $mail=$email->queryalluser();
+                foreach($mail as $res)
+                {
+                    
+                    mail($res['Email'],'Atencion!!!!! Vencio La poliza contractual del vehiculo '.$alert['Placa'],' La poliza del vehiculo'.$alert['Placa'].' vencio el '.$alert['VencePolizaContraactual'].
+                    'por favor renovarlo y actualizar la informacion en el sistema');
+                    
+                }
+
             }
             if($alert['dias_tenicomecanica']>=0)
             {
 
-                 mail('nelsonaldevaran@gmail.com','Atencion!!!!! Vencio La revision tecnicomecanica del vehiculo '.$alert['Placa'],' La poliza del vehiculo'.$alert['Placa'].' vencio el '.$alert['VenceTecnicomecanica'].
-                'por favor renovarlo y actualizar la informacion en el sistema');
+                $email=new user;
+                $mail=$email->queryalluser();
+                foreach($mail as $res)
+                {
+                 
+                    mail($res['Email'],'Atencion!!!!! Vencio La revision tecnicomecanica del vehiculo '.$alert['Placa'],' La poliza del vehiculo'.$alert['Placa'].' vencio el '.$alert['VenceTecnicomecanica'].
+                    'por favor renovarlo y actualizar la informacion en el sistema');
+                    
+                }
+                 
             }
         }
 
+    }
+    public function querydiasvencelicencia()
+    {
+        $fecha=date('Y-m-d');
+        $sql="SELECT conductor.VenceLicencia,conductor.Nombre, conductor.Apellido,
+		DATEDIFF('$fecha',conductor.VenceLicencia ) as dias_Licencia
+		FROM conductor";
+        $rest=$this->conex->prepare($sql);
+        $rest->execute(array());
+        while($res=$rest->fetch(PDO::FETCH_ASSOC))
+        {
+            $this->alert[]=$res;
+        }
+        return $this->alert;        
+    }
+    public function alertasVencimientolicencia()
+    {
+                $licencia=new alerts;
+            $alert=$licencia->querydiasvencelicencia();
+        foreach($alert as $aler)
+        {
+            if($aler['dias_Licencia']>=0)
+            {
+                echo "<script type='text/javascript'>
+                alert('Atencion!!! la licencia del conductor $alert[Nombre] $alert[Apellido] a vencido, por favor renovar y actualizar los datos en el sistema');
+                </script>";
+            }elseif($aler['dias_Licencia']==8)
+            {
+                echo "<script type='text/javascript'>
+                alert('Atencion!!! la licencia del conductor $alert[Nombre] $alert[Apellido] vencera el dia $alert[VenceLicencia], por favor renovar y actualizar los datos en el sistema');
+                </script>";
+            }
+
+        }
     }
 }
 class valida

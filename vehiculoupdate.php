@@ -20,10 +20,18 @@ require('class/class.php');
 $nav= new rol;
 $act=new actividad;
 $vehi=new vehiculo;
+$marca=$vehi->querymarca();
+$color=$vehi->querycolor();
+$servicio=$vehi->queryservicio();
+$clase=$vehi->queryclase();
+$carroceria=$vehi->querycarroceria();
+$direccion=$vehi->querydireccion();
+$conbustible=$vehi->querycombustible();
+$llanta=$vehi->queryllanta();
 $acti=$act->queryactividad();
 $veh=$vehi->queryvehiculoplacaupdate($pla);
+print_r($veh);
 ?>
-
 <!doctype html>
 <html lang="en">
   <head>
@@ -31,6 +39,7 @@ $veh=$vehi->queryvehiculoplacaupdate($pla);
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <title>Actualizacion informacion vehiculos</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
   </head>
   <body class="">
     <?php $na=$nav->navrol($_SESSION['rol']) ?>
@@ -51,20 +60,22 @@ $veh=$vehi->queryvehiculoplacaupdate($pla);
                 <input type="text" name="placa" class="form-control" value="<?php echo $veh[0]['Placa'];?>">
             </label>
             <label class="form-label">
-                <b>Marca</b><br>
-                <input type="text" name="Marca" class="form-control" value="<?php echo $veh[0]['Marca'];?>">
+                <b>Clase de vehiculo</b><br>
+                <select name="clase" class="form-select">
+                        <option value="<?php echo $veh[0]['IdClase']?>"><?php echo $veh[0]['ClaseVehiculo']?> Clase actual</option>
+                        <?php foreach($clase as $class){?>
+                            <option <?php echo $class['IdClase']?>><?php echo $class['ClaseVehiculo']?></option>
+                        <?php }?>
+                </select>
             </label>
             <label class="form-label">
-                <b>Linea</b><br>
-                <input type="text" name="linea" class="form-control" value="<?php echo $veh[0]['Linea'];?>">
-            </label>
-            <label class="form-label">
-                <b>Modelo</b><br>
-                <input type="number" name="modelo" class="form-control" value="<?php echo $veh[0]['modelo'];?>">
-            </label>
-            <label class="form-label">
-                <b>Color</b><br>
-                <input type="text" name="color" class="form-control" value="<?php echo $veh[0]['Color'];?>">
+                <b>Tipo carroceria</b><br>
+                <select name="carroceria" class="form-select">
+                    <option value="<?php echo $veh[0]['idTipoCarroceria'];?>"><?php echo $veh[0]['TipoCarroceria'];?> Tipo carroceria actual</option>
+                    <?php foreach($carroceria as $carroce){?>
+                        <option <?php echo $carroce['idTipoCarroceria']?>><?php echo $carroce['TipoCarroceria']?></option>
+                    <?php }?>
+                </select>
             </label>
       </div>
 
@@ -72,16 +83,29 @@ $veh=$vehi->queryvehiculoplacaupdate($pla);
 
             <label class="form-label">
                 <b>Servicio</b><br>
-                <input type="text" name="Servicio" class="form-control" value="<?php echo $veh[0]['Servicio'];?>">
+                <select name="Servicio" class="form-select">
+                        <option value="<?php echo $veh[0]['Servicio_IdServicio'];?>"><?php echo $veh[0]['Servicio'];?> Servicio actual</option>
+                    <?php foreach($servicio as $ser){?>
+                        <option value="<?php echo $ser['Servicio_IdServicio']?>"><?php echo $ser['Servicio']?></option>
+                        <?php }?>
+                </select>
             </label>
+
             <label class="form-label">
-                <b>Clase de vehiculo</b><br>
-                <input type="text" name="clase" class="form-control" value="<?php echo $veh[0]['ClaseVehiculo'];?>">
+                <b>Actividad del vehiculo</b><br>
+                <select name="actividad" class="form-select" >
+                    <option value="<?php echo $veh[0]['IdUso'];?>"><?php echo $veh[0]['UsoVheiculocol'].' Actividad actual';?></option>
+                    <?php
+                    for($i=0;$i<sizeof($acti);$i++)
+                    {
+                    ?>
+                    <option value="<?php echo $acti[$i]['IdUso'] ?>"><?php echo $acti[$i]['UsoVheiculocol'] ?></option>
+                    <?php
+                    }
+                    ?>
+                </select>
             </label>
-            <label class="form-label">
-                <b>Tipo carroceria</b><br>
-                <input type="text" name="carroceria" class="form-control" value="<?php echo $veh[0]['TipoCarroceria'];?>">
-            </label>
+
             <label class="form-label">
                 <b>Capacidad carga (Kg)</b><br>
                 <input type="number" name="carga" class="form-control" value="<?php echo $veh[0]['CapacidadCarga'];?>">
@@ -97,7 +121,12 @@ $veh=$vehi->queryvehiculoplacaupdate($pla);
 
             <label class="form-label">
                 <b>Tipo direccion</b><br>
-                <input type="text" name="direccion" class="form-control" value="<?php echo $veh[0]['TipoDireccion'];?>">
+                <select name="direccion" class="form-select">
+                    <option value="<?php echo $veh[0]['IdDireccion'];?>"><?php echo $veh[0]['tipiDireccion'];?> Direccion actual</option>
+                    <?php foreach($direccion as $direc){?>
+                    <option value="<?php echo $direc['IdDireccion'];?>"><?php echo $direc['tipiDireccion'];?></option>
+                    <?php }?>
+                </select>
             </label>
             <label class="form-label">
                 <b>Numero de chasis</b><br>
@@ -108,18 +137,40 @@ $veh=$vehi->queryvehiculoplacaupdate($pla);
                 <input type="text" name="nVIM" class="form-control" value="<?php echo $veh[0]['NoVim'];?>">
             </label>
             <label class="form-label">
-                <b>Actividad del vehiculo</b><br>
+                <b>Color</b><br>
+                <select name="color" class="form-select">
+                        <option value="<?php echo $veh[0]['Color_IdColor'];?>"><?php echo $veh[0]['Color'];?> Color Actual</option>
+                    <?php foreach($color as $col){?>
+                        <option value="<?php echo $col['Color_IdColor'] ?>"><?php echo $col['Color'] ?></option>
+                    <?php }?>
+                </select>
+            </label>
+        </div>
+        <div class="accordion-body">
+        <label class="form-label">
+                <b>Marca</b><br>
+                <select name="Marca" class="form-select" id="selectmarca">
+                    <option value="<?php echo $veh[0]['Marca_IdMarca']?>"><?php echo $veh[0]['NombreMarca']?> Marca Actual</option>
+                    <?php foreach($marca as $mar){ ?>
+                        <option value="<?php echo $mar['idMarca']?>"><?php echo $mar['NombreMarca']?></option>
+                    <?php }?>
+                </select>
+            </label>
 
-                <select name="actividad" class="form-select" >
-                    <option value="<?php echo $veh[0]['IdUso'];?>"><?php echo $veh[0]['UsoVheiculocol'].' Actividad actual';?></option>
-                    <?php
-                    for($i=0;$i<sizeof($acti);$i++)
-                    {
-                    ?>
-                    <option value="<?php echo $acti[$i]['IdUso'] ?>"><?php echo $acti[$i]['UsoVheiculocol'] ?></option>
-                    <?php
-                    }
-                    ?>
+            <label class='form-label'>
+            <b>Linea</b><br>
+            <select name="linea"class="form-select" id="datoslinea">
+                <option>Seleccione la linea</option>
+            </select>
+            </label>
+            
+            <label class="form-label">
+                <b>Modelo</b><br>
+                <?php $cont=date('Y')?>
+                <select name="modelo" class="form-select">
+                <?php while ($cont >= 1970) { ?>
+                    <option value="<?php echo($cont); ?>"><?php echo($cont); ?></option>
+                    <?php $cont = ($cont-1); } ?>
                 </select>
             </label>
 
@@ -146,7 +197,12 @@ $veh=$vehi->queryvehiculoplacaupdate($pla);
             </label>
             <label class="form-label">
                 <b>Tipo combustible</b><br>
-                <input type="text" name="combustible" class="form-control" value="<?php echo $veh[0]['Combustible'];?>">
+                <select name="combustible" class="form-select">
+                    <option class="<?php echo $veh[0]['IdTipoCombustible'];?>"><?php echo $veh[0]['Combustuble'];?> Tipo Combustible actual</option>
+                    <?php foreach($conbustible as $comb){?>
+                        <option value="<?php echo $comb['IdTipoCombustible']?>"><?php echo $comb['Combustuble']?></option>
+                    <?php }?>
+                </select>
             </label>
         </div>
         </div>
@@ -201,7 +257,12 @@ $veh=$vehi->queryvehiculoplacaupdate($pla);
                 </label>
                 <label class="form-label">
                     <b>Dimensiones llantas</b><br>
-                    <input type="text" name="Dllantas" class="form-control" value="<?php echo $veh[0]['DimensionLLanta'];?>">
+                    <select name="Dllantas" class="form-select">
+                        <option value="<?php echo $veh[0]['Llanta_idLlanta'];?>"><?php echo $veh[0]['Dimenciones'];?> Dimencion llanta actual</option>
+                        <?php foreach($llanta as $llan){?>
+                            <option value="<?php echo $llan['Llanta_idLlanta']?>"><?php echo $llan['Dimenciones']?></option>
+                        <?php }?>
+                    </select>
                 </label>
             </div>
         </div>
@@ -315,12 +376,14 @@ $veh=$vehi->queryvehiculoplacaupdate($pla);
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
+    <script src="js/index.js"></script>
   </body>
 </html>
 <?php
-
+    print_r($_POST);
     if(isset($_POST['update']))
     {
+        
         $veh=$vehi->updatevehiculo($_POST);
 
     }

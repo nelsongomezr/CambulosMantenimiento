@@ -4,6 +4,14 @@ require('class/class.php');
 $nav= new rol;
 $act=new actividad;
 $vehi=new vehiculo;
+$marca =$vehi->querymarca();
+$color =$vehi->querycolor();
+$servicio =$vehi->queryservicio();
+$clase =$vehi->queryclase();
+$carroceria=$vehi->querycarroceria();
+$direccion=$vehi->querydireccion();
+$combustible=$vehi->querycombustible();
+$llanta=$vehi->queryllanta();
 $acti=$act->queryactividad();
 ?>
 
@@ -14,6 +22,7 @@ $acti=$act->queryactividad();
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <title>Registro vehiculos</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
   </head>
   <body class="">
     <?php $na=$nav->navrol($_SESSION['rol']) ?>
@@ -34,65 +43,37 @@ $acti=$act->queryactividad();
                 <input type="text" name="placa" class="form-control">
             </label>
             <label class="form-label">
-                <b>Marca</b><br>
-                <input type="text" name="Marca" class="form-control">
-            </label>
-            <label class="form-label">
-                <b>Linea</b><br>
-                <input type="text" name="linea" class="form-control">
-            </label>
-            <label class="form-label">
-                <b>Modelo</b><br>
-                <input type="number" name="modelo" class="form-control">
-            </label>
-            <label class="form-label">
-                <b>Color</b><br>
-                <input type="text" name="color" class="form-control">
-            </label>
-      </div>
-
-        <div class="accordion-body">
-
-            <label class="form-label">
-                <b>Servicio</b><br>
-                <input type="text" name="Servicio" class="form-control">
-            </label>
-            <label class="form-label">
                 <b>Clase de vehiculo</b><br>
-                <input type="text" name="clase" class="form-control">
+                <select name="clase" class="form-select"> 
+                    <?php foreach($clase as $clas){?>
+                    <option value="<?php echo $clas['IdClase']?>"> <?php echo $clas['ClaseVehiculo']?> </option>
+                    <?php }?>
+                </select>
             </label>
+
             <label class="form-label">
                 <b>Tipo carroceria</b><br>
-                <input type="text" name="carroceria" class="form-control">
+                <select name="carroceria" class="form-select">
+                <?php foreach($carroceria as $carr){?>
+                    <option value="<?php echo $carr['idTipoCarroceria']?>"><?php echo $carr['TipoCarroceria'] ?></option>
+                <?php }?>
+                </select>
             </label>
-            <label class="form-label">
-                <b>Capacidad carga (Kg)</b><br>
-                <input type="number" name="carga" class="form-control">
-            </label>
-            <label class="form-label">
-                <b>Peso bruto vehiculo (Kg)</b><br>
-                <input type="number" name="pesobruto" class="form-control">
-            </label>
-
+            
         </div>
 
         <div class="accordion-body">
-
-            <label class="form-label">
-                <b>Tipo direccion</b><br>
-                <input type="text" name="direccion" class="form-control">
-            </label>
-            <label class="form-label">
-                <b>Numero de chasis</b><br>
-                <input type="text" name="nchasis" class="form-control">
-            </label>
-            <label class="form-label">
-                <b>Numero de VIM</b><br>
-                <input type="text" name="nVIM" class="form-control">
+        <label class="form-label">
+                <b>Servicio</b><br>
+                <select name="Servicio" class="form-select">
+                    <option>Seleccione el servicio</option>
+                    <?php foreach($servicio as $ser){?>
+                        <option value="<?php echo $ser['IdServicio']?>"><?php echo $ser['Servicio']?></option>
+                    <?php }?>
+                </select>
             </label>
             <label class="form-label">
                 <b>Actividad del vehiculo</b><br>
-
                 <select name="actividad" class="form-select">
                     <option>Seleccione la actividad</option>
                     <?php
@@ -106,6 +87,69 @@ $acti=$act->queryactividad();
                 </select>
             </label>
 
+            <label class="form-label">
+                <b>Capacidad carga (Kg)</b><br>
+                <input type="number" name="carga" class="form-control">
+            </label>
+            <label class="form-label">
+                <b>Peso bruto vehiculo (Kg)</b><br>
+                <input type="number" name="pesobruto" class="form-control">
+            </label>
+        </div>
+
+        <div class="accordion-body">
+
+            <label class="form-label">
+                <b>Tipo direccion</b><br>
+                <select name="direccion" class="form-select">
+                    <?php foreach($direccion as $dir){?>
+                    <option value="<?php echo $dir['IdDireccion']?>"><?php echo $dir['tipiDireccion']?></option>
+                    <?php }?>
+                </select>
+            </label>
+            <label class="form-label">
+                <b>Numero de chasis</b><br>
+                <input type="text" name="nchasis" class="form-control">
+            </label>
+            <label class="form-label">
+                <b>Numero de VIM</b><br>
+                <input type="text" name="nVIM" class="form-control">
+            </label>
+            <label class="form-label">
+                <b>Color</b><br>
+                    <select name="color" class="form-select w-70">
+                        <?php foreach($color as $color1){?>
+                        <option value="<?php echo  $color1['Id_Color'] ?>"> <?php echo  $color1['Color'] ?></option>
+                        <?php }?>
+                    </select>
+            </label>
+
+        </div>
+        <div class="accordion-body">
+            <label class="form-label">
+                <b>Marca</b><br>
+                <select name="Marca" class="form-select" id="selectmarca">
+                    <?php foreach($marca as $res){?>
+                    <option value="<?php echo $res['idMarca']?>"><?php echo $res['NombreMarca']?></option>
+                    <?php }?>
+                </select>
+            </label>
+            <label class='form-label'>
+            <b>Linea</b><br>
+            <select name="linea"class="form-select" id="datoslinea">
+                <option>Seleccione la linea</option>
+            </select>
+            </label>
+            <label class="form-label">
+                <b>Modelo</b><br>
+                <!--input type="number" name="modelo" class="form-control">-->
+                <?php $cont=date('Y')?>
+                <select name="modelo" class="form-select">
+                <?php while ($cont >= 1970) { ?>
+                    <option value="<?php echo($cont); ?>"><?php echo($cont); ?></option>
+                    <?php $cont = ($cont-1); } ?>
+                </select>
+            </label>
         </div>
     </div>
   </div>
@@ -129,7 +173,11 @@ $acti=$act->queryactividad();
             </label>
             <label class="form-label">
                 <b>Tipo combustible</b><br>
-                <input type="text" name="combustible" class="form-control">
+                <select name="combustible" class="form-select">
+                    <?php foreach($combustible as $comb){?>
+                    <option value="<?php echo $comb['IdTipoCombustible']?>"><?php echo $comb['Combustuble']?></option>
+                    <?php }?>
+                </select>
             </label>
         </div>
         </div>
@@ -139,7 +187,7 @@ $acti=$act->queryactividad();
     <div class="accordion-item bg-secondary bg-opacity-10">
         <h2 class="accordion-header" id="flush-headingThree">
           <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
-            <b>Dimenciones</b>
+            <b>Dimensiones</b>
           </button>
         </h2>
     <div id="flush-collapseThree" class="accordion-collapse collapse" aria-labelledby="flush-headingThree" data-bs-parent="#accordionFlushExample">
@@ -184,7 +232,11 @@ $acti=$act->queryactividad();
                 </label>
                 <label class="form-label">
                     <b>Dimensiones llantas</b><br>
-                    <input type="text" name="Dllantas" class="form-control">
+                    <select name="Dllantas" class="form-select">
+                        <?php foreach($llanta as $lla){?>
+                        <option value="<?php echo $lla['idLlanta']?>"><?php echo $lla['Dimenciones']?></option>
+                        <?php }?>
+                    </select>
                 </label>
             </div>
         </div>
@@ -294,14 +346,18 @@ $acti=$act->queryactividad();
 
 
     <?php require('partials/footer.php') ?>
-
+    <!--bootstrap-->                            
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
+    <!--End bootstrap-->                            
+    <!--jquerty-->
+    <script src="js/index.js"></script>
+    <!--End jquerty-->
   </body>
 </html>
 <?php
-
+    print_r($_POST);
     if(isset($_POST['registrar']))
     {
         $veh=$vehi->insertvehiculo($_POST);

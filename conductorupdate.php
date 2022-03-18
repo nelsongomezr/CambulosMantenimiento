@@ -8,6 +8,7 @@ if($_SESSION==null || $_SESSION=="")
     </script>";
     die();
 }
+print_r($_GET);
 require('class/class.php');
 $query=new conductor;
 $queryv=new vehiculo;
@@ -15,6 +16,8 @@ $id=$_GET['id'];
 $quer= $query->queryconductor($id);
 $queryv=$queryv->queryvehiculo();
 $nav= new rol;
+$contrato=$query->querycontrato();
+$catlicencia=$query->querycategorialicencia();
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -62,7 +65,12 @@ $nav= new rol;
                     <input type="date" name="edad" class="form-control" value="<?php echo $quer[0]['Edad'];?>">
                 </label>
                 <label class="form-label"><b>Tipo de contrato:</b><br>
-                    <input type="text" name="tcon" class="form-control" value="<?php echo $quer[0]['TipoContrato'];?>" >
+                    <select name="tcon" class="form-select">
+                        <option value="<?php echo $quer[0]['IdContrato']?>"><?php echo $quer[0]['Contrato']?> Contrato actual</option>
+                        <?php foreach($contrato as $cont){?>
+                            <option value="<?php echo $cont['IdContrato'];?>"><?php echo $cont['Contrato'];?></option>
+                        <?php }?>
+                    </select>
                 </label>
                 <label class="form-label"><b>Años experiencia</b><br>
                     <input type="text" name="expe" class="form-control" value="<?php echo $quer[0]['ExpConduccion'];?>">
@@ -91,7 +99,12 @@ $nav= new rol;
             <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample">
                 <div class="accordion-body">
                     <label class="form-label"><b>Categoria Licencia</b><br>
-                        <input type="text" name="catlicen" class="form-control" value="<?php echo $quer[0]['CategoLicencia'];?>">
+                        <select name="catlicen" class="form-select">
+                            <option value="<?php echo $quer[0]['IdTipoLicencia']?>"> <?php echo $quer[0]['TipoLicencia']?> Categoria actual</option>
+                            <?php foreach($catlicencia as $cat){ ?>
+                                <option value="<?php echo $cat['IdTipoLicencia'];?>"><?php echo $cat['TipoLicencia'];?></option>
+                            <?php }?>
+                        </select>
                     </label> 
                     <label class="form-label"><b>Fecha vencimiento licencia</b>
                         <input type="date" name="venlicen" class="form-control" value="<?php echo $quer[0]['VenceLicencia'];?>" class="form-control w-50">

@@ -5,6 +5,7 @@ $rols= new Rol;
 $query=new vehiculo;
 $vehi=$query->queryvehiculoplaca($_GET['id']); 
 $id=$vehi[0]['idVehiculo'];
+
 ?>
 
 <!doctype html>
@@ -35,11 +36,11 @@ $id=$vehi[0]['idVehiculo'];
             </label>
             <label class="form-label">
                 <b>Marca</b><br>
-                <input type="text" name="Marca" class="form-control" value="<?php echo $vehi[0]['Marca'];?>" disabled>
+                <input type="text" name="Marca" class="form-control" value="<?php echo $vehi[0]['NombreMarca'];?>" disabled>
             </label>
             <label class="form-label">
                 <b>Linea</b><br>
-                <input type="text" name="linea" class="form-control" value="<?php echo $vehi[0]['Linea'];?>" disabled>
+                <input type="text" name="linea" class="form-control" value="<?php echo $vehi[0]['NombreLinea'];?>" disabled>
             </label>
             <label class="form-label">
                 <b>Modelo</b><br>
@@ -118,7 +119,7 @@ $id=$vehi[0]['idVehiculo'];
             </label>
             <label class="form-label">
                 <b>Tipo combustible</b><br>
-                <input type="text" name="combustible" class="form-control" value="<?php echo $vehi[0]['Combustible'];?>" disabled>
+                <input type="text" name="combustible" class="form-control" value="<?php echo $vehi[0]['Combustuble'];?>" disabled>
             </label>
         </div>
         </div>
@@ -173,7 +174,7 @@ $id=$vehi[0]['idVehiculo'];
                 </label>
                 <label class="form-label">
                     <b>Dimensiones llantas</b><br>
-                    <input type="text" name="Dllantas" class="form-control" value="<?php echo $vehi[0]['DimensionLLanta'];?>" disabled>
+                    <input type="text" name="Dllantas" class="form-control" value="<?php echo $vehi[0]['Dimenciones'];?>" disabled>
                 </label>
             </div>
         </div>

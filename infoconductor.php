@@ -17,10 +17,11 @@ if(!$_GET==0 or($_GET==""))
 {
   $Quercond=$querycond->queryconductor($_GET['id']);
   $id=$Quercond[0]['idConductor'];
+  
 }else
 {
   $Quercond=$querycond->queryconductor($_SESSION['varid']);
-  $id=$Quercond[0]['idConductor'];
+  $id=$Quercond[0]['idConductor']; 
   
 }
 
@@ -56,7 +57,7 @@ $edad= $querycond->old($Quercond[0]['Edad']);
                 </label>
                 <label class="form-label">
                   <b>Edad</b><br>
-                  <input type="text" class="form-control" value="<?php echo $edad[0];?>" disabled>
+                  <input type="text" class="form-control" value="<?php echo $edad['0'];?>" disabled>
                 </label>
               <label class="form-label">
                 <b>Telefono</b><br>
@@ -68,7 +69,7 @@ $edad= $querycond->old($Quercond[0]['Edad']);
               </label>
               <label class="form-label">
                 <b>Tipo Contrato</b><br>
-                <input type="text" class="form-control" value="<?php echo $Quercond[0]['TipoContrato'];?>" disabled>
+                <input type="text" class="form-control" value="<?php echo $Quercond[0]['Contrato'];?>" disabled>
               </label>
             </div>
 
@@ -106,7 +107,7 @@ $edad= $querycond->old($Quercond[0]['Edad']);
                 <div class="accordion-body">
                   <label class="form-label">
                     <b>Tipo licencia</b><br>
-                    <input type="text" class="form-control" value="<?php echo $Quercond[0]['CategoLicencia'];?>" disabled>
+                    <input type="text" class="form-control" value="<?php echo $Quercond[0]['TipoLicencia'];?>" disabled>
                   </label>
                 <label class="form-label">
                   <b>Fecha vencimiento</b><br>
