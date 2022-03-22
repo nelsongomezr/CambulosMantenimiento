@@ -30,7 +30,6 @@ $conbustible=$vehi->querycombustible();
 $llanta=$vehi->queryllanta();
 $acti=$act->queryactividad();
 $veh=$vehi->queryvehiculoplacaupdate($pla);
-print_r($veh);
 ?>
 <!doctype html>
 <html lang="en">
@@ -62,9 +61,9 @@ print_r($veh);
             <label class="form-label">
                 <b>Clase de vehiculo</b><br>
                 <select name="clase" class="form-select">
-                        <option value="<?php echo $veh[0]['IdClase']?>"><?php echo $veh[0]['ClaseVehiculo']?> Clase actual</option>
-                        <?php foreach($clase as $class){?>
-                            <option <?php echo $class['IdClase']?>><?php echo $class['ClaseVehiculo']?></option>
+                        <option value="<?php echo $veh[0]['Clase_IdClase'];?>"><?php echo $veh[0]['ClaseVehiculo'];?></option>
+                        <?php foreach($clase as $clas){?>
+                            <option value="<?php echo $clas['IdClase'] ?>"> <?php echo $clas['ClaseVehiculo'] ?></option>
                         <?php }?>
                 </select>
             </label>
@@ -198,9 +197,9 @@ print_r($veh);
             <label class="form-label">
                 <b>Tipo combustible</b><br>
                 <select name="combustible" class="form-select">
-                    <option class="<?php echo $veh[0]['IdTipoCombustible'];?>"><?php echo $veh[0]['Combustuble'];?> Tipo Combustible actual</option>
+                    <option value="<?php echo $veh[0]['Combustible_Idcombustible'];?>"><?php echo $veh[0]['Combustuble'];?> Tipo Combustible actual</option>
                     <?php foreach($conbustible as $comb){?>
-                        <option value="<?php echo $comb['IdTipoCombustible']?>"><?php echo $comb['Combustuble']?></option>
+                        <option value="<?php echo $comb['Combustible_Idcombustible']?>"><?php echo $comb['Combustuble']?></option>
                     <?php }?>
                 </select>
             </label>
@@ -380,7 +379,7 @@ print_r($veh);
   </body>
 </html>
 <?php
-    print_r($_POST);
+
     if(isset($_POST['update']))
     {
         

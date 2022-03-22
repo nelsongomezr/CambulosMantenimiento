@@ -24,6 +24,7 @@
     $nav=new rol;
     $comp= new comparendo;
     $com=$comp->querynrocomparendo($idco);
+    //print_r($com);
     if(sizeof($com)>0)
     {
         $id=$com[0]['idConductor'];
@@ -31,6 +32,7 @@
     {
         $com=$comp->querynrocomparendovehi($idco);
         $id=$com[0]['Vehiculo_IdVehiculoo'];
+        print_r($com);
     } 
     ?>
     <!doctype html>
@@ -109,13 +111,8 @@
     </body>
     </html>
     <?php
-
     if(isset($_POST['update']))
     {
-        print_r($_POST);
-        $valida=new valida;
-        $char=$valida->caracteres($_POST);
         $com=$comp->updatecomparendo($_POST);
     }
-
     ?>
