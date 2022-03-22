@@ -8,7 +8,6 @@ if($_SESSION==null || $_SESSION=="")
     </script>";
     die();
 }
-print_r($_GET);
 require('class/class.php');
 $query=new conductor;
 $queryv=new vehiculo;
@@ -154,6 +153,7 @@ $catlicencia=$query->querycategorialicencia();
 </body>
 </html>
 <?php
+print_r($_POST);
 if(isset($_POST['update'])){
     $up=$query->updateconductor($_POST);
 }

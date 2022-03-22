@@ -348,10 +348,10 @@ class conductor extends Conexion
             'flicen'=>$flicen, 'files'=>$ruta, 'idveh'=>$idveh, 'rol'=>$rol, 'ed'=>$ed, 'tcon'=>$tcon, 'expe'=>$aexp, 'frunt'=>$frunt,
             'ArchAutoDescuento'=>$filedescu,'ArchAperturaCaja'=>$filecaja,'ArchEquipoMovil'=>$filemovil ));
             $_SESSION['varid']=$Quercond[0]['idConductor'];
-            /*echo "<script type='text/javascript'> 
+            echo "<script type='text/javascript'> 
             alert('Informacion actualizada correctamente.');
             window.location='infoconductor.php ';
-            </script>*/
+            </script>";
         }
         
     }
@@ -405,6 +405,7 @@ class Vehiculo extends Conexion
 {
     private $queryvehi=array();
     private $querveh=array();
+    private $querveh1=array();
     private $queve=array();
     private $quev=array();
     private $que=array();
@@ -415,6 +416,7 @@ class Vehiculo extends Conexion
     private $direccion=array();
     private $combustible=array();
     private $llanta=array();
+
 
     public function aniomodelo()
     {
@@ -656,9 +658,9 @@ class Vehiculo extends Conexion
             $rest->execute(array('pla'=>$pla));
             while($res=$rest->fetch(PDO::FETCH_ASSOC))
             {
-                $this->querveh[]=$res;
+                $this->querveh1[]=$res;
             }
-            return $this->querveh;
+            return $this->querveh1;
     }
     public function deletevehiculo($plac)
     {
@@ -791,10 +793,10 @@ class Vehiculo extends Conexion
         or($dimllantas=="") or($nsoat=="") or($fsoat=="") or($filesoat=="") or($nrotecnico=="") or($ftecnico=="") or($filetecnico=="")or($ncontra=="") or($fcontra=="")
         or($filecontra=="") or($nlicen=="") or($fmatri=="") or($filematric=="") )
         {
-            /*echo "<script type='text/javascript'>
+            echo "<script type='text/javascript'>
             alert('Debe diligenciar todos los campos');
             window.location='vehiculoquery.php';
-            </script>";*/
+            </script>";
         }else
         {
             $sql="UPDATE vehiculo SET vehiculo.Placa=:pla,
@@ -815,10 +817,10 @@ class Vehiculo extends Conexion
             'pesb'=>$pbruto,'nejes'=>$nejes,'nllan'=>$nllantas,'dllan'=>$dimllantas,'tdir'=>$tdir,'ltotal'=>$ltotal,'alt'=>$alto,'anch'=>$ancho,'entreeje'=>$dejes,'nmot'=>$nmot,'ncha'=>$nchasis,'nvim'=>$VIM,'vsoat'=>$fsoat,'psoat'=>$nsoat,'arcsoat'=>$filesoat,'ntec'=>$nrotecnico,'vtec'=>$ftecnico,'arctec'=>$filetecnico,'nlic'=>$nlicen,'fmatr'=>$fmatri,'archlic'=>$filematric,'uvehi'=>$act,'pcontra'=>$ncontra,'vcontra'=>$fcontra,'arccontra'=>$filecontra));
 
             $_SESSION['placa']=$update['placa'];
-            /*echo "<script type='text/javascript'>
+            echo "<script type='text/javascript'>
             alert('Informacion del vehiculo a sido actualizada exitosamente');
             window.location='vehiculoupdate.php';
-            </script>";*/
+            </script>";
         
         }
     }
@@ -1145,6 +1147,7 @@ class comparendo extends Conexion
     public function insertcomparendo($comp)
     // registra la informacion del comparendo en la base
     {
+        print_r($comp);
         $nrpcomp=$comp['NroComp'];
         $tip=$comp['Tipo'];
         $fech=$comp['fecha'];
@@ -1187,7 +1190,7 @@ class comparendo extends Conexion
                 }
             }else
             {
-                echo "<script> alert('Comparendo ya se encuentra registrado'); </script>";
+               /* echo "<script> alert('Comparendo ya se encuentra registrado'); </script>";*/
             }
         }
     }
@@ -1208,7 +1211,7 @@ class comparendo extends Conexion
     }
 
     public function querynrocomparendovehi($nro)
-    //consulta comparendos por numero de comparendo con datos del conductor
+    //consulta comparendos por numero de comparendo con datos del vehiculo
     {
         $sql="SELECT * FROM comparendos
         INNER JOIN vehiculo
@@ -1241,7 +1244,7 @@ class comparendo extends Conexion
     public function querycomparconddriver($id)
     // consulta comparendos por id de conductor
     {
-        $sql="SELECT * FROM comparendos 
+        $sql="SELECT * FROM comparendos
         INNER JOIN conductor
         ON comparendos.Conductor_IdConductor=conductor.idConductor
         WHERE comparendos.Conductor_IdConductor=:id AND comparendos.Eliminar=1";
@@ -1516,17 +1519,5 @@ class alerts extends Conexion
         }
     }
 }
-class valida
-{
-    public function caracteres($str)
-    // valida que los datos ingresados no contengan caracteres especiales
-    {
 
-        $res = preg_replace('/[*\;\<\>\*\#\=\'\""]+/', '', $str);
-        echo "<script type='text/javascript'>
-        alert('Solo Alfanumerico');
-        </script>";
-        return $res;
-    }   
-}
 ?>
