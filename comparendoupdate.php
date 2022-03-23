@@ -11,20 +11,19 @@
         error_reporting(0); 
 
             if(empty($_GET['id']))  
-         {
-             $idco=$_SESSION['comparendo'];
-         }
-             if(!empty($_GET['id']>0))
-         {
-             $idco=$_GET['id'];
-         }
-         
+        {
+            $idco=$_SESSION['comparendo'];
+        }
+            if(!empty($_GET['id']>0))
+        {
+            $idco=$_GET['id'];
+        }
+        
         
     require('class/class.php');
     $nav=new rol;
     $comp= new comparendo;
     $com=$comp->querynrocomparendo($idco);
-    //print_r($com);
     if(sizeof($com)>0)
     {
         $id=$com[0]['idConductor'];

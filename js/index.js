@@ -93,3 +93,35 @@ $(document).on('change','#selectmarca', function(){
   }
 })
 //fin muestra lineas correspondientes a cada marca, segun la marca seleccionada
+
+//validacion formularios
+  const formulario=document.getElementById('formulario');
+  const inputs = document.querySelectorAll('#formulario input');
+  const expresiones ={
+    usuario: /^[0-9]$/;
+    pass: /^[a-zA-Z0-9]$/;
+  }
+  const validaformulario = (e) =>{
+    switch(e.target.name){
+      case"usuario":
+        if(expresiones.usuario.test(e.target.value)){
+            
+        }else{
+          document.querySelector('#grupo__usuario.formulario__input-error').classList.add('formulario__input-error-activo');
+        }
+      break;
+
+      case"pass":
+
+      break;
+    }
+  }
+  inputs.forEach((input)=>{
+    input.addEventListener('keyup', validaformulario);
+    input.addEventListener('blur',validaformulario);
+  });
+
+  formulario.addEventListener('submit',(e)=>{
+    e.preventDefault();
+  })
+//validacion formularios

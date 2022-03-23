@@ -317,7 +317,7 @@ $acti=$act->queryactividad();
     <div class="accordion-item bg-secondary bg-opacity-10">
         <h2 class="accordion-header" id="flush-headingEigth">
         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseEigth" aria-expanded="false" aria-controls="flush-collapseEigth">
-            <b>Licencia de trancito</b>
+            <b>Licencia de transito</b>
         </button>
         </h2>
         <div id="flush-collapseEigth" class="accordion-collapse collapse" aria-labelledby="flush-headingEigth" data-bs-parent="#accordionFlushExample">
@@ -357,7 +357,6 @@ $acti=$act->queryactividad();
   </body>
 </html>
 <?php
-    print_r($_POST);
     if(isset($_POST['registrar']))
     {
         $veh=$vehi->insertvehiculo($_POST);

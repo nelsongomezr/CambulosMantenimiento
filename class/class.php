@@ -1198,8 +1198,6 @@ class comparendo extends Conexion
     //consulta comparendos por numero de comparendo con datos del conductor
     {
         $sql="SELECT * FROM `comparendos` 
-        INNER JOIN Conductor
-        ON comparendos.Conductor_IdConductor=conductor.idConductor
         WHERE comparendos.NroComp=:nrocomp";
         $rest=$this->conex->prepare($sql);
         $rest->execute(array('nrocomp'=>$nro));
@@ -1214,8 +1212,7 @@ class comparendo extends Conexion
     //consulta comparendos por numero de comparendo con datos del vehiculo
     {
         $sql="SELECT * FROM comparendos
-        INNER JOIN vehiculo
-        ON comparendos.Vehiculo_IdVehiculoo=vehiculo.idVehiculo
+        
         WHERE comparendos.NroComp=:nrocomp";
         $rest=$this->conex->prepare($sql);
         $rest->execute(array('nrocomp'=>$nro));
@@ -1229,7 +1226,13 @@ class comparendo extends Conexion
      // consulta comparendos por placa de vehiculo
     {
 
-        $sql="SELECT * FROM comparendos 
+        /*$sql="SELECT * FROM comparendos 
+        INNER JOIN Vehiculo
+        ON comparendos.Vehiculo_IdVehiculoo=vehiculo.idVehiculo
+        WHERE comparendos.Vehiculo_IdVehiculoo=:id AND comparendos.Eliminar=1";*/
+        $sql="SELECT comparendos.IdComparendo, comparendos.NroComp, comparendos.TipoComparendo, comparendos.Fecha, comparendos.Secretaria,
+        comparendos.Infraccion, comparendos.Estado, comparendos.Valor, comparendos.ValorApagar, comparendos.Eliminar, comparendos.Conductor_IdConductor,
+        comparendos.Vehiculo_IdVehiculoo,Vehiculo.idVehiculo FROM comparendos 
         INNER JOIN Vehiculo
         ON comparendos.Vehiculo_IdVehiculoo=vehiculo.idVehiculo
         WHERE comparendos.Vehiculo_IdVehiculoo=:id AND comparendos.Eliminar=1";
@@ -1244,7 +1247,13 @@ class comparendo extends Conexion
     public function querycomparconddriver($id)
     // consulta comparendos por id de conductor
     {
-        $sql="SELECT * FROM comparendos
+        /*$sql="SELECT * FROM comparendos
+        INNER JOIN conductor
+        ON comparendos.Conductor_IdConductor=conductor.idConductor
+        WHERE comparendos.Conductor_IdConductor=:id AND comparendos.Eliminar=1";*/
+        $sql="SELECT comparendos.IdComparendo, comparendos.NroComp, comparendos.TipoComparendo, comparendos.Fecha, comparendos.Secretaria,
+        comparendos.Infraccion, comparendos.Estado, comparendos.Valor, comparendos.ValorApagar, comparendos.Eliminar, comparendos.Conductor_IdConductor,
+        comparendos.Vehiculo_IdVehiculoo,conductor.idConductor FROM comparendos
         INNER JOIN conductor
         ON comparendos.Conductor_IdConductor=conductor.idConductor
         WHERE comparendos.Conductor_IdConductor=:id AND comparendos.Eliminar=1";

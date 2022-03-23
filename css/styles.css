@@ -1,0 +1,7 @@
+.formulario__input-error-activo{
+    display: block;
+}
+
+.formulario__input-error{
+    display: none;
+}
